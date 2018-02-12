@@ -79,11 +79,11 @@ public class AsignacionEstudianteEndpoint {
     @Produces({"application/json"})
     public Response create(AsignacionEstudianteDto dto) {
         AsignacionEstudiante ae = new AsignacionEstudiante(
-                this.em.find(Estudiante.class, dto.getEstudiante()),
-                this.em.find(Curso.class, dto.getCurso()),
                 dto.getZona(),
                 dto.getExamenFinal(),
-                dto.getNotaFinal()
+                dto.getNotaFinal(),
+                this.em.find(Estudiante.class, dto.getEstudiante()),
+                this.em.find(Curso.class, dto.getCurso())
         );
         this.em.persist(ae);
         return Response.ok(ae).build();
