@@ -1,0 +1,144 @@
+
+<div class="container min-page-height">
+    <div class="row">
+        <div class="visible-xs-block"><br></div>
+        <h2 class="visible-lg-block visible-xs-inline">
+            {{options?.title}}
+            <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+        </h2>
+        <div *ngIf="canPost" class="visible-xs-inline pull-right">
+            <button type="button" class="btn btn-success btn-add" 
+                title="Nuevo"
+                routerLink="{{options.baseUrl}}/agregar">
+                <span class="glyphicon-plus"></span>
+            </button>
+        </div>
+        <div class="visible-xs-block"><br></div>
+    </div>    
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-sm-6 hidden-xs">
+            <div *ngIf="canPost" class="row">
+                <button type="button" class="btn btn-success btn-add" 
+                    title="Nuevo"
+                    routerLink="{{options.baseUrl}}/agregar" >
+                    <span class="glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <div class="row">
+                <form class="form-horizontal">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="searchTerm" placeholder="Buscar..." [(ngModel)]="searchDto.searchTerm">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary" (click)="search(curPage)" title="Buscar"
+                                [disabled]="searchDto.searchTerm && searchDto.searchTerm.length < 3">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th (click)="sort(column.name,curPage)"
+                            *ngFor="let column of options?.columns"
+                            [ngClass]="sortIconClass[column.sortDirection]"
+                            width="{{column.width}}">
+                            {{column.caption}}
+                        </th>
+                        <th class="actionsColumn">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entity of entityList">
+                        <!--
+                        <td *ngFor="let column of options?.columns">
+                            {{entity[column.name]}}
+                            <span *ngIf="column.catalog">
+                                {{column.catalog[ entity[column.name] ]}}
+                            </span>
+                        </td>
+                        -->
+                        <td>{{entity?.codigoLdap}}</td>
+                        <td>{{entity?.nombre}}</td>
+                        <td>{{entity?.email}}</td>
+                        <td>
+                            <input type="checkbox" [checked]="entity?.activo == 1" disabled>
+                        </td>
+                        <td>
+                            <span *ngIf="entity.esLdap == 1">
+                                De dominio
+                            </span>
+                            <span *ngIf="entity.esLdap == 0">
+                                Local
+                            </span>                            
+                        </td>
+                        <td>{{entity?.rol.nombre }}</td>
+
+                        <td>
+                            <a *ngIf="canGet" class="action-link" routerLink="{{options.baseUrl}}/{{entity.id}}" title="Ver">
+                                <span class="glyphicon glyphicon-zoom-in"></span> &nbsp;&nbsp;
+                            </a>
+                            <a *ngIf="canPut" class="action-link" routerLink="{{options.baseUrl}}/edit/{{entity.id}}" title="Editar">
+                                <span class="glyphicon glyphicon-edit"></span> &nbsp;&nbsp;
+                            </a>
+                            
+                            <a *ngIf="canPut" class="action-link" (click)="desactivar(entity)" title="Desactivar">
+                                <span class="glyphicon glyphicon-off"></span>
+                            </a>
+                            <span *ngIf="canPut && !(entity.esLdap == 1)">
+                                &nbsp;&nbsp;
+                                <a class="action-link" (click)="resetPassword(entity)" title="Reiniciar contraseña">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </a>
+                            </span>
+                            <!--
+                            <a class="action-link" (click)="eliminar(entity)" title="Eliminar">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                            -->
+
+                            <!--
+                            <span *ngFor="accionesExtraPorCampo">
+                                &nbsp;&nbsp;
+                                <a class="action-link" (click)="resetPassword(entity)" title="Reiniciar contraseña">
+                                    <span class="glyphicon glyphicon-refresh"></span>
+                                </a>                                
+                            </span>
+                            -->
+                        </td>
+                    </tr>
+                    <tr *ngIf="busy && !sorting">
+                        <td [attr.colspan]="options.columns.length + 1" class="text-center">
+                            <img src="assets/img/loading_16.gif" />
+                        </td>
+                    </tr>
+                    <tr *ngIf="!busy && entityList.length <= 0">
+                        <td [attr.colspan]="options.columns.length + 1" class="text-center">No hay más información</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            <a class="action-link" 
+                (click)="fetchPage(1)">&laquo;</a>
+            <a *ngFor="let page of pages" 
+                class="action-link" 
+                [ngClass]="{'active': curPage == page}"
+                (click)="fetchPage(page)">
+                {{page}}
+            </a>
+            <a class="action-link"
+                (click)="fetchPage(pages.length)">&raquo;</a>
+        </div>
+    </div>
+</div>

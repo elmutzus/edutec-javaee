@@ -1,0 +1,7 @@
+textarea.autosize {
+	height: 2em;
+	transition: height .3s ease-out;
+}
+textarea.autosize:focus {
+	/*height: 12em;*/
+}

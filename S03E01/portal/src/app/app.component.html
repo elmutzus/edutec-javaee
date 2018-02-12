@@ -1,0 +1,33 @@
+<ng-progress [color]="'#008fff'" [showSpinner]="false"></ng-progress>
+
+<ng-modal-dialog></ng-modal-dialog>
+
+<mat-sidenav-container [class.m2app-dark]="isDarkTheme">
+    <mat-sidenav #sidenav mode="over" class="app-sidenav" color="primary">
+        <mat-toolbar>
+            <mat-toolbar-row>
+                <span>Opciones</span>
+                <span class="app-toolbar-filler"></span>
+                <mat-icon class="example-icon">build</mat-icon>
+            </mat-toolbar-row>
+            <mat-toolbar-row>
+                <button routerLink="/admin/parametros" 
+                    mat-button (click)="sidenav.toggle()" 
+                    class="app-sidebar-button">
+                    Parametros del sistema
+                </button>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </mat-sidenav>
+    <mat-toolbar color="primary">
+        <button mat-button class="app-menu-button" (click)="sidenav.toggle()">
+            <i class="material-icons">menu</i>
+        </button>
+        <a routerLink="/" style="color: white">
+            <span class="title">{{title}}</span>
+        </a>
+    </mat-toolbar>
+
+    <router-outlet></router-outlet>
+    
+</mat-sidenav-container>

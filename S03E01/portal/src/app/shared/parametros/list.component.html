@@ -1,0 +1,35 @@
+
+    <mat-card>
+        <h2 *ngIf="options?.showTitle || !insideDialog">
+            Parámetros del Sistema
+            <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+        </h2>
+        <div *ngIf="entityList && entityList.length > 0 ">
+            <form novalidate #entityForm="ngForm" >
+                <fieldset>
+                    <legend>Generales:</legend>
+                    <section fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" 
+                        fxLayoutAlign="left top" fxLayoutGap="20px"
+                        *ngFor="let child of entityList, let i=index ">
+                        <mat-form-field class="flex-item" fxFlex="25%">                
+                            <textarea name="valor-{{i}}"
+                                [(ngModel)]="child.valor" [disabled]="child.editable==0"
+                                matInput 
+                                placeholder="{{child.nombre}}" rows=1 required>
+                            </textarea>
+                        </mat-form-field>
+                    </section>
+                </fieldset>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4 col-xs-12 col-dlg-12">
+                    <div class="row">
+                        <button mat-raised-button color="primary"
+                            (click)="save()"
+                            [disabled]="!entityForm.form.valid || busy">
+                            Guardar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-card>

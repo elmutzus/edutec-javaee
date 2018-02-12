@@ -1,0 +1,82 @@
+
+    <mat-card>
+        <h2 class="visible-lg-block visible-xs-inline" *ngIf="options?.showTitle || !options?.insideDialog">
+            {{options?.title}}
+            <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+        </h2>
+        <div class="visible-xs-inline pull-right">
+            <button mat-mini-fab title="Nuevo registro" (click)="editarEntity()">+</button>
+        </div>
+        <br>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <!-- agregar un flag para ver si permite ser sorteado, por campo -->
+                            <th (click)="column.sortable && sort(column.name,curPage)"
+                                *ngFor="let column of options?.columns"
+                                [ngClass]="sortIconClass[column.sortDirection]"
+                                width="{{column.width}}">
+                                {{column.caption}}
+                            </th>
+                            <th class="actionsColumn">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entity of entityList">
+                            <td *ngFor="let column of options?.columns">
+                                {{ objectResolve(column.name, entity) }}
+                            </td>
+                            <td>
+                                <!--
+                                <a class="action-link" (click)="verEntity(entity)" title="Ver">
+                                    <span class="glyphicon glyphicon-zoom-in"></span> &nbsp;&nbsp;
+                                    Ver
+                                </a>
+                                -->
+                                <a class="action-link" (click)="editarEntity(entity)" title="Editar">
+                                    <i class="material-icons">&#xE254;</i>
+                                </a>
+                                <a class="action-link" (click)="eliminar(entity)" title="Eliminar">
+                                    <i class="material-icons">&#xE872;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr *ngIf="busy && !sorting">
+                            <td [attr.colspan]="options.columns.length + 1" class="text-center">
+                                <img src="assets/img/loading_16.gif" />
+                            </td>
+                        </tr>
+                        <tr *ngIf="!busy && entityList.length <= 0">
+                            <td [attr.colspan]="options.columns.length + 1" class="text-center">No hay más información</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <a class="action-link" title="Primera" (click)="fetchPage(1)">&laquo;</a>
+                <a *ngFor="let page of pages" 
+                    class="action-link" 
+                    [ngClass]="{'active': curPage == page}"
+                    (click)="fetchPage(page)">
+                    {{page}}
+                </a>
+                <a class="action-link" title="Última" (click)="fetchPage(pages.length)">&raquo;</a>
+
+                <!--
+                <button class="mat-paginator-navigation-previous mat-icon-button" mat-icon-button="" 
+                    type="button" aria-describedby="cdk-describedby-message-14" 
+                    cdk-describedby-host="" aria-label="Previous page" 
+                    style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><span class="mat-button-wrapper"><div class="mat-paginator-increment"></div></span>
+                        <div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div>
+                        <div class="mat-button-focus-overlay"></div>
+                        <div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div>
+                        <div class="mat-button-focus-overlay"></div>
+                </button>
+                <mat-paginator _ngcontent-c44="" class="mat-paginator"><div class="mat-paginator-container"><div class="mat-paginator-page-size"><div class="mat-paginator-page-size-label">Items per page:</div><mat-form-field class="mat-paginator-page-size-select mat-input-container mat-form-field ng-tns-c20-59 mat-form-field-type-mat-select mat-form-field-can-float mat-form-field-hide-placeholder mat-primary ng-star-inserted mat-form-field-should-float"><div class="mat-input-wrapper mat-form-field-wrapper"><div class="mat-input-flex mat-form-field-flex"><div class="mat-input-infix mat-form-field-infix"><mat-select class="mat-select ng-tns-c21-60 ng-star-inserted" role="listbox" id="mat-select-9" tabindex="0" aria-label="Items per page:" aria-required="false" aria-disabled="false" aria-invalid="false" aria-multiselectable="false"><div class="mat-select-trigger" aria-hidden="true" cdk-overlay-origin=""><div class="mat-select-value"><span class="mat-select-value-text ng-tns-c21-60 ng-star-inserted"><span class="ng-tns-c21-60 ng-star-inserted">10</span></span></div><div class="mat-select-arrow-wrapper"><div class="mat-select-arrow"></div></div></div></mat-select><span class="mat-form-field-label-wrapper mat-input-placeholder-wrapper mat-form-field-placeholder-wrapper"></span></div></div><div class="mat-input-underline mat-form-field-underline"><span class="mat-input-ripple mat-form-field-ripple"></span></div><div class="mat-input-subscript-wrapper mat-form-field-subscript-wrapper"><div class="mat-input-hint-wrapper mat-form-field-hint-wrapper ng-tns-c20-59 ng-trigger ng-trigger-transitionMessages ng-star-inserted" style="opacity: 1; transform: translateY(0%);"><div class="mat-input-hint-spacer mat-form-field-hint-spacer"></div></div></div></div></mat-form-field></div><div class="mat-paginator-range-actions"><div class="mat-paginator-range-label">11 - 20 of 20</div><button class="mat-paginator-navigation-previous mat-icon-button" mat-icon-button="" type="button" aria-describedby="cdk-describedby-message-14" cdk-describedby-host="" aria-label="Previous page" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><span class="mat-button-wrapper"><div class="mat-paginator-increment"></div></span><div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div><div class="mat-button-focus-overlay"></div></button><button class="mat-paginator-navigation-next mat-icon-button" mat-icon-button="" type="button" aria-describedby="cdk-describedby-message-15" cdk-describedby-host="" aria-label="Next page" style="touch-action: none; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" disabled=""><span class="mat-button-wrapper"><div class="mat-paginator-decrement"></div></span><div class="mat-button-ripple mat-ripple mat-button-ripple-round" matripple=""></div><div class="mat-button-focus-overlay"></div></button></div></div></mat-paginator>
+                -->
+            </div>
+        </div>
+    </mat-card>

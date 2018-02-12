@@ -1,0 +1,38 @@
+<div class="modal fade " [ngClass]="{'in': visible }" 
+    id="myModal" 
+    role="dialog">
+    <div class="modal-dialog" [ngClass]="dialogClassSize">
+        <div class="modal-content">
+            <div class="modal-header" *ngIf="visibleTitle">
+                <div class="progress" [ngClass]="{'visible': busy}">
+                    <div class="progress-bar progress-bar-sm progress-bar-striped active" role="progressbar"
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+                <button type="button" class="close" (click)="closeMe()">
+                    <span>×</span>
+                </button>
+                <h1 class="modal-title" id="myModalLabel">
+                    {{title}}
+                    <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+                </h1>
+            </div>
+            <div class="modal-body" [ngClass]="bodyExtraClass">
+                <button type="button" class="close" (click)="closeMe()" *ngIf="!visibleTitle" title="Cerrar">
+                    <span>×</span>
+                </button>
+
+                <ng-template dynamiccomponent-host></ng-template>
+            </div>
+            
+            <!--
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" (click)="closeMe()">Cerrar</button>
+            </div>
+            -->
+        </div>
+    </div>
+</div>
+<!--
+    <ng-modal-dialog></ng-modal-dialog>
+-->

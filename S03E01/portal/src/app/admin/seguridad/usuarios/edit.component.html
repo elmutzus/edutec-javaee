@@ -1,0 +1,132 @@
+<div class="container min-page-height">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>
+                <span *ngIf="!readOnly">Editando usuario: </span>
+                <span *ngIf="entity">
+                    {{entity.nombre}}
+                </span>
+                <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+            </h2>
+        </div>
+    </div>
+    <div class="row" *ngIf="entity">
+        <form novalidate #entityForm="ngForm">
+            <fieldset [disabled]="readOnly">
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="esLdap" #esLdap
+                        [checked]="entity.esLdap == 1"
+                        (change)="entity.esLdap = esLdap.checked?1:0">
+                        Existe en LDAP (Usuario de dominio)
+                    </label>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="activo" #activo
+                            [(ngModel)]="entity.activo"
+                            (change)="entity.activo = activo.checked?1:0">
+                        Activo
+                    </label>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': codigoLdap.invalid && !busy}">
+                    <label>Usuario (código o usuario de dominio)*</label>
+                    <input type="text" class="form-control" name="codigoLdap" #codigoLdap="ngModel" [(ngModel)]="entity.codigoLdap" required>
+                    <div>
+                        <small  class="text-danger" *ngIf="codigoLdap.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': nombre.invalid && !busy}">
+                    <label>Nombre</label>
+                    <input type="text" class="form-control" name="nombre" #nombre="ngModel" [(ngModel)]="entity.nombre" 
+                    [disabled]="entity.esLdap==1" required>
+                    <div>
+                        <small  class="text-danger" *ngIf="nombre.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': email.invalid && !busy}">
+                    <label>Email</label>
+                    <input type="text" class="form-control" name="email" #email="ngModel" 
+                    [(ngModel)]="entity.email"
+                    [disabled]="entity.esLdap==1 || readOnly" email required>
+                    <div>
+                        <small class="text-danger" *ngIf="email.errors?.required && !busy">
+                            Valor requerido
+                        </small>
+                        <small class="text-danger" *ngIf="email.errors?.email && !busy">
+                            Ingrese un email válido
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': telefono.invalid && !busy}">
+                    <label>Teléfono*</label>
+                    <input type="number" min="0" class="form-control" name="telefono" #telefono="ngModel" 
+                    [(ngModel)]="entity.telefono" [disabled]="readOnly" required >
+                    <div>
+                        <small  class="text-danger" *ngIf="telefono.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+                <div *ngIf="!readOnly">
+                    <div class="clearfix"></div>
+                    <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': rol.invalid && !busy}">
+                        <label>
+                            Rol*
+                            <img src="assets/img/loading_10.gif" *ngIf="!roles || roles.length <= 0"/>
+                        </label>
+                        <select class="form-control" name="rol" #rol="ngModel" [(ngModel)]="entity.rol.id" 
+                            required>
+                            <option *ngFor="let c of roles" [ngValue]="c.id">{{c.nombre}}</option>
+                        </select>
+                        <div>
+                            <small  class="text-danger" *ngIf="rol.invalid && !busy">
+                                Valor requerido
+                            </small>
+                        </div>
+                    </div>
+                    <!--
+                    <div *ngIf="!entity.esLdap == 1">
+                        <div class="clearfix"></div>
+                        <div class="form-group col-sm-4 col-xs-12">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" name="enviarNuevoPassword" #enviarNuevoPassword="ngModel" [(ngModel)]="entity.enviarNuevoPassword">
+                                Enviar nueva contraseña vía email
+                            </label>
+                            <button class="btn btn-default">
+                                Reiniciar contraseña de usuario
+                            </button>                     
+                        </div>
+                    </div>
+                    -->
+                </div>
+            </fieldset>
+            <fieldset [disabled]="!entityForm.form.valid || busy" *ngIf="!readOnly">
+                <div class="form-group col-sm-8 col-xs-12 col-dlg-12">
+                    <div class="modal-footer-custom">
+                        <button class="btn btn-primary" (click)="save()">Guardar</button>
+                        &nbsp;
+                        &nbsp;
+                        <button class="btn btn-default">Cancelar</button>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset *ngIf="!id && readOnly && !entity.esLdap == 1">
+                <div class="form-group col-sm-8 col-xs-12 col-dlg-12">
+                    <div class="modal-footer-custom">
+                        <button class="btn btn-primary" routerLink="/cambiar-password">Cambiar contraseña</button>
+                    </div>
+                </div>
+            </fieldset>
+
+        </form>
+    </div>
+</div>

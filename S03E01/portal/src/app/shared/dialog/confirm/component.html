@@ -1,0 +1,16 @@
+
+<div class="container">
+    <div class="row">
+    	<div class="col-sm-12 col-xs-12">
+	    	<h3>
+	    		{{options.message}}
+	            <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+	    	</h3>
+	    </div>
+    	<div class="col-sm-12 col-xs-12">
+            <div fxFlex></div>
+            <button mat-raised-button color="primary" (click)="yesClick()" style="margin-right:15px;">Si</button>&nbsp;&nbsp;
+            <button mat-raised-button (click)="noClick()">No</button>
+    	</div>
+    </div>
+</div>
