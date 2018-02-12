@@ -35,7 +35,7 @@ public class DepartamentoEndpoint {
     private Departamento buscarDepartamento(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipio WHERE u.id = :parametro", Departamento.class)
+                    .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipios WHERE u.id = :parametro", Departamento.class)
                     .setParameter("parametro", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
@@ -57,7 +57,7 @@ public class DepartamentoEndpoint {
     @Produces({"application/json"})
     public List<Departamento> findAll() {
         List<Departamento> cr = this.em
-                .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipio", Departamento.class)
+                .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipios", Departamento.class)
                 .getResultList();
         return cr;
     }
