@@ -37,7 +37,7 @@ public class RolEndpoint {
     private Rol getSpecific(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT u FROM Rol WHERE u.id = :param", Rol.class)
+                    .createQuery("SELECT u FROM Rol u WHERE u.id = :param", Rol.class)
                     .setParameter("param", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
@@ -49,7 +49,7 @@ public class RolEndpoint {
     @Produces({"application/json"})
     public List<Rol> findAll() {
         List<Rol> roles = this.em
-                .createQuery("SELECT u FROM Rol", Rol.class)
+                .createQuery("SELECT u FROM Rol u", Rol.class)
                 .getResultList();
         return roles;
     }

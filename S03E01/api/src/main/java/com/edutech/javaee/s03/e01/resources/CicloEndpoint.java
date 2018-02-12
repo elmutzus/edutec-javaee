@@ -38,7 +38,7 @@ public class CicloEndpoint {
     private Ciclo getSpecific(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT u FROM Ciclo WHERE u.id = :param", Ciclo.class)
+                    .createQuery("SELECT u FROM Ciclo u WHERE u.id = :param", Ciclo.class)
                     .setParameter("param", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
@@ -50,7 +50,7 @@ public class CicloEndpoint {
     @Produces({"application/json"})
     public List<Ciclo> findAll() {
         List<Ciclo> ciclos = this.em
-                .createQuery("SELECT u FROM Ciclo", Ciclo.class)
+                .createQuery("SELECT u FROM Ciclo u", Ciclo.class)
                 .getResultList();
         return ciclos;
     }
@@ -58,8 +58,7 @@ public class CicloEndpoint {
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response findById(@PathParam("id") Integer id) {
-        //Usuario usuario = this.em.find(Usuario.class, id);        
+    public Response findById(@PathParam("id") Integer id) {     
         Ciclo ciclo = this.getSpecific(id);
 
         if (ciclo == null) {

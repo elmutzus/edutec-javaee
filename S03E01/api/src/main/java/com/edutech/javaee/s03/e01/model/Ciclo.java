@@ -32,7 +32,6 @@ public class Ciclo implements Serializable {
     }
     
     public Ciclo(String codigo) {
-        this.id = id;
         this.codigo = codigo;
     }
         

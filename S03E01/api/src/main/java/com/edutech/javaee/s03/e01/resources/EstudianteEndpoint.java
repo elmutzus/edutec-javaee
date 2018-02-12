@@ -37,7 +37,7 @@ public class EstudianteEndpoint {
     private Estudiante getSpecific(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT u FROM Estudiante WHERE u.id = :param", Estudiante.class)
+                    .createQuery("SELECT u FROM Estudiante u WHERE u.id = :param", Estudiante.class)
                     .setParameter("param", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
@@ -49,7 +49,7 @@ public class EstudianteEndpoint {
     @Produces({"application/json"})
     public List<Estudiante> findAll() {
         List<Estudiante> ciclos = this.em
-                .createQuery("SELECT u FROM Estudiante", Estudiante.class)
+                .createQuery("SELECT u FROM Estudiante u", Estudiante.class)
                 .getResultList();
         return ciclos;
     }
