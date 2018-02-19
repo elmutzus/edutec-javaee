@@ -1,16 +1,14 @@
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.UsuarioDao;
 import com.edutech.javaee.s03.e01.dto.UsuarioDto;
-import com.edutech.javaee.s03.e01.model.Rol;
 import com.edutech.javaee.s03.e01.model.Usuario;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,96 +29,60 @@ import javax.ws.rs.core.Response;
 @Path("/usuarios")
 public class UsuarioEndpoint {
 
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
+    final UsuarioDao usrDao;
 
-    private Usuario buscarUsuario(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.id = :parametro", Usuario.class)
-                    .setParameter("parametro", id)
-                    .getSingleResult();
-        } catch(NoResultException nre) {
-            return null;
-        }
+    public UsuarioEndpoint() {
+        this.usrDao = null;
     }
-    
+
+    @Inject
+    public UsuarioEndpoint(UsuarioDao usrDao) {
+        this.usrDao = usrDao;
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Usuario> findAll() {
-        List<Usuario> usuarios = this.em
-                .createQuery("SELECT u FROM Usuario u JOIN FETCH u.rol", Usuario.class)
-                .getResultList();        
-        return usuarios;
+        return this.usrDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        //Usuario usuario = this.em.find(Usuario.class, id);        
-        Usuario usuario = this.buscarUsuario(id);
-        
-        if (usuario == null)
+        Usuario usuario = this.usrDao.find(id);
+
+        if (usuario == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")                    
+                    .entity("Recurso no encontrado")
                     .build();
-        
+        }
+
         return Response.ok(usuario, MediaType.APPLICATION_JSON).build();
     }
-    
+
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(UsuarioDto dto) {
-        Usuario usuario = new Usuario(
-                dto.getCodigo(), 
-                dto.getEmail(), 
-                dto.getNombre(), 
-                dto.getTelefono(),
-                this.em.find(Rol.class, dto.getIdRol())
-            );
-        this.em.persist(usuario);
+        Usuario usuario = this.usrDao.save(dto);
         return Response.ok(usuario).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(UsuarioDto dto) throws RollbackException {
-        Usuario usuario = this.buscarUsuario(dto.getId());
-
-        if (usuario == null)
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")                    
-                    .build();
-        
-        usuario.setCodigo(dto.getCodigo());
-        usuario.setEmail(dto.getEmail());
-        usuario.setNombre(dto.getNombre());
-        usuario.setPassword(dto.getPassword());
-        usuario.setTelefono(dto.getTelefono());        
-        this.em.merge(usuario);
+        Usuario usuario = this.usrDao.edit(dto);
         return Response.ok(usuario).build();
     }
-    
+
     @DELETE
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Usuario usuario = this.buscarUsuario(id);
-
-        if (usuario == null)
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")                    
-                    .build();
-            
-        this.em.remove(usuario);
+        Usuario usuario = this.usrDao.remove(id);
         return Response.ok(usuario).build();
     }
 
@@ -128,9 +90,9 @@ public class UsuarioEndpoint {
     @Path("/partial")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Map<String, Object>> getMessage() {
-    //public Response getMessage() {
+        //public Response getMessage() {
         List<Map<String, Object>> usuarios = new ArrayList<>();
-        
+
         Map<String, Object> usuario = new HashMap<>();
         usuario.put("Nombre", "Nahum Alarcon");
         usuario.put("Email", "nahum.rahim@gmail.com");
@@ -143,10 +105,10 @@ public class UsuarioEndpoint {
         usuario.put("Email", "nahum@verynicetech.com");
         //usuario.put("Telefono", "99998888");
         usuarios.add(usuario);
-        
+
         return usuarios;
         //return Response.ok(usuario).build();
-        
+
     }
 
 }

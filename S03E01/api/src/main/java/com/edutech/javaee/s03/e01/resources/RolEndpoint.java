@@ -5,13 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.RolDao;
 import com.edutech.javaee.s03.e01.dto.RolDto;
 import com.edutech.javaee.s03.e01.model.Rol;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,34 +30,29 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/roles")
 public class RolEndpoint {
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
 
-    private Rol getSpecific(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Rol u WHERE u.id = :param", Rol.class)
-                    .setParameter("param", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    final RolDao rlDao;
+
+    public RolEndpoint() {
+        this.rlDao = null;
+    }
+
+    @Inject
+    public RolEndpoint(RolDao rlDao) {
+        this.rlDao = rlDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Rol> findAll() {
-        List<Rol> roles = this.em
-                .createQuery("SELECT u FROM Rol u", Rol.class)
-                .getResultList();
-        return roles;
+        return this.rlDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Rol rol = this.getSpecific(id);
+        Rol rol = this.rlDao.find(id);
 
         if (rol == null) {
             return Response
@@ -75,31 +69,14 @@ public class RolEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(RolDto dto) {
-        Rol rol = new Rol(
-                dto.getNombre(),
-                dto.getDescripcion()
-        );
-        this.em.persist(rol);
+        Rol rol = this.rlDao.save(dto);
         return Response.ok(rol).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(RolDto dto) throws RollbackException {
-        Rol rol = this.getSpecific(dto.getId());
-
-        if (rol == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        rol.setDescripcion(dto.getDescripcion());
-        rol.setNombre(dto.getNombre());
-
-        this.em.merge(rol);
+        Rol rol = this.rlDao.edit(dto);
         return Response.ok(rol).build();
     }
 
@@ -107,17 +84,7 @@ public class RolEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Rol rol = this.getSpecific(id);
-
-        if (rol == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(rol);
+        Rol rol = this.rlDao.remove(id);
         return Response.ok(rol).build();
     }
 

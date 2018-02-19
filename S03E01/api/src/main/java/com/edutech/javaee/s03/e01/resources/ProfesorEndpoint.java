@@ -5,13 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.ProfesorDao;
 import com.edutech.javaee.s03.e01.dto.ProfesorDto;
 import com.edutech.javaee.s03.e01.model.Profesor;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,34 +31,28 @@ import javax.ws.rs.core.Response;
 @Path("/profesores")
 public class ProfesorEndpoint {
 
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
+    final ProfesorDao prfDao;
 
-    private Profesor getSpecific(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Profesor u WHERE u.id = :param", Profesor.class)
-                    .setParameter("param", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    public ProfesorEndpoint() {
+        this.prfDao = null;
+    }
+
+    @Inject
+    public ProfesorEndpoint(ProfesorDao prfDao) {
+        this.prfDao = prfDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Profesor> findAll() {
-        List<Profesor> profesores = this.em
-                .createQuery("SELECT u FROM Profesor u", Profesor.class)
-                .getResultList();
-        return profesores;
+        return this.prfDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Profesor profesor = this.getSpecific(id);
+        Profesor profesor = this.prfDao.find(id);
 
         if (profesor == null) {
             return Response
@@ -76,33 +69,14 @@ public class ProfesorEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(ProfesorDto dto) {
-        Profesor profesor = new Profesor(
-                dto.getCarnet(),
-                dto.getNombre(),
-                dto.getDireccion()
-        );
-        this.em.persist(profesor);
+        Profesor profesor = this.prfDao.save(dto);
         return Response.ok(profesor).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(ProfesorDto dto) throws RollbackException {
-        Profesor profesor = this.getSpecific(dto.getId());
-
-        if (profesor == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        profesor.setCarnet(dto.getCarnet());
-        profesor.setDireccion(dto.getDireccion());
-        profesor.setNombre(dto.getNombre());
-
-        this.em.merge(profesor);
+        Profesor profesor = this.prfDao.edit(dto);
         return Response.ok(profesor).build();
     }
 
@@ -110,17 +84,7 @@ public class ProfesorEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Profesor profesor = this.getSpecific(id);
-
-        if (profesor == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(profesor);
+        Profesor profesor = this.prfDao.remove(id);
         return Response.ok(profesor).build();
     }
 }

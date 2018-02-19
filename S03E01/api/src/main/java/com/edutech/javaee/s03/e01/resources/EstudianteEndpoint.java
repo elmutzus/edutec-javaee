@@ -5,13 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.EstudianteDao;
 import com.edutech.javaee.s03.e01.dto.EstudianteDto;
 import com.edutech.javaee.s03.e01.model.Estudiante;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -31,34 +30,29 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/estudiantes")
 public class EstudianteEndpoint {
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
 
-    private Estudiante getSpecific(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Estudiante u WHERE u.id = :param", Estudiante.class)
-                    .setParameter("param", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    final EstudianteDao estDao;
+
+    public EstudianteEndpoint() {
+        this.estDao = null;
+    }
+
+    @Inject
+    public EstudianteEndpoint(EstudianteDao estDao) {
+        this.estDao = estDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Estudiante> findAll() {
-        List<Estudiante> ciclos = this.em
-                .createQuery("SELECT u FROM Estudiante u", Estudiante.class)
-                .getResultList();
-        return ciclos;
+        return this.estDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Estudiante estudiante = this.getSpecific(id);
+        Estudiante estudiante = this.estDao.find(id);
 
         if (estudiante == null) {
             return Response
@@ -75,33 +69,14 @@ public class EstudianteEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(EstudianteDto dto) {
-        Estudiante estudiante = new Estudiante(
-                dto.getCarnet(),
-                dto.getNombre(),
-                dto.getDireccion()
-        );
-        this.em.persist(estudiante);
+        Estudiante estudiante = this.estDao.save(dto);
         return Response.ok(estudiante).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(EstudianteDto dto) throws RollbackException {
-        Estudiante estudiante = this.getSpecific(dto.getId());
-
-        if (estudiante == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        estudiante.setCarnet(dto.getCarnet());
-        estudiante.setDireccion(dto.getDireccion());
-        estudiante.setNombre(dto.getNombre());
-        
-        this.em.merge(estudiante);
+        Estudiante estudiante = this.estDao.edit(dto);
         return Response.ok(estudiante).build();
     }
 
@@ -109,17 +84,7 @@ public class EstudianteEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Estudiante estudiante = this.getSpecific(id);
-
-        if (estudiante == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(estudiante);
+        Estudiante estudiante = this.estDao.remove(id);
         return Response.ok(estudiante).build();
     }
 }

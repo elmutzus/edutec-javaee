@@ -5,14 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.SedeDao;
 import com.edutech.javaee.s03.e01.dto.SedeDto;
-import com.edutech.javaee.s03.e01.model.Municipio;
 import com.edutech.javaee.s03.e01.model.Sede;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,35 +30,29 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/sedes")
 public class SedeEndpoint {
-    
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
 
-    private Sede buscarSede(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Sede u JOIN FETCH u.municipio WHERE u.id = :parametro", Sede.class)
-                    .setParameter("parametro", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    final SedeDao sdDao;
+
+    public SedeEndpoint() {
+        this.sdDao = null;
+    }
+
+    @Inject
+    public SedeEndpoint(SedeDao sdDao) {
+        this.sdDao = sdDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Sede> findAll() {
-        List<Sede> sd = this.em
-                .createQuery("SELECT u FROM Sede u JOIN FETCH u.municipio", Sede.class)
-                .getResultList();
-        return sd;
+        return this.sdDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Sede sd = this.buscarSede(id);
+        Sede sd = this.sdDao.find(id);
 
         if (sd == null) {
             return Response
@@ -77,37 +69,14 @@ public class SedeEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(SedeDto dto) {
-        Sede sl = new Sede(
-                dto.getCodigo(),
-                dto.getNombre(),
-                dto.getDireccion(),
-                this.em.find(Municipio.class, dto.getMunicipio())
-        );
-
-        this.em.persist(sl);
-
+        Sede sl = this.sdDao.save(dto);
         return Response.ok(sl).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(SedeDto dto) throws RollbackException {
-        Sede sd = this.buscarSede(dto.getId());
-
-        if (sd == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        sd.setCodigo(dto.getCodigo());
-        sd.setDireccion(dto.getDireccion());
-        sd.setNombre(dto.getNombre());
-        sd.setMunicipio(this.em.find(Municipio.class, dto.getMunicipio()));
-
-        this.em.merge(sd);
+        Sede sd = this.sdDao.edit(dto);
         return Response.ok(sd).build();
     }
 
@@ -115,17 +84,7 @@ public class SedeEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Sede sd = this.buscarSede(id);
-
-        if (sd == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(sd);
+        Sede sd = this.sdDao.remove(id);
         return Response.ok(sd).build();
     }
 }

@@ -5,13 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.CicloDao;
 import com.edutech.javaee.s03.e01.dto.CicloDto;
 import com.edutech.javaee.s03.e01.model.Ciclo;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,34 +31,28 @@ import javax.ws.rs.core.Response;
 @Path("/ciclos")
 public class CicloEndpoint {
 
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
+    final CicloDao clDao;
 
-    private Ciclo getSpecific(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Ciclo u WHERE u.id = :param", Ciclo.class)
-                    .setParameter("param", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    public CicloEndpoint() {
+        this.clDao = null;
+    }
+
+    @Inject
+    public CicloEndpoint(CicloDao clDao) {
+        this.clDao = clDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Ciclo> findAll() {
-        List<Ciclo> ciclos = this.em
-                .createQuery("SELECT u FROM Ciclo u", Ciclo.class)
-                .getResultList();
-        return ciclos;
+        return this.clDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
-    public Response findById(@PathParam("id") Integer id) {     
-        Ciclo ciclo = this.getSpecific(id);
+    public Response findById(@PathParam("id") Integer id) {
+        Ciclo ciclo = this.clDao.find(id);
 
         if (ciclo == null) {
             return Response
@@ -76,28 +69,14 @@ public class CicloEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(CicloDto dto) {
-        Ciclo ciclo = new Ciclo(
-                dto.getCodigo()
-        );
-        this.em.persist(ciclo);
+        Ciclo ciclo = this.clDao.save(dto);
         return Response.ok(ciclo).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(CicloDto dto) throws RollbackException {
-        Ciclo ciclo = this.getSpecific(dto.getId());
-
-        if (ciclo == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        ciclo.setCodigo(dto.getCodigo());
-        this.em.merge(ciclo);
+        Ciclo ciclo = this.clDao.edit(dto);
         return Response.ok(ciclo).build();
     }
 
@@ -105,17 +84,7 @@ public class CicloEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Ciclo ciclo = this.getSpecific(id);
-
-        if (ciclo == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(ciclo);
+        Ciclo ciclo = this.clDao.remove(id);
         return Response.ok(ciclo).build();
     }
 }

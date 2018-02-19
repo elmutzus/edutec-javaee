@@ -5,14 +5,12 @@
  */
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.MunicipioDao;
 import com.edutech.javaee.s03.e01.dto.MunicipioDto;
-import com.edutech.javaee.s03.e01.model.Departamento;
 import com.edutech.javaee.s03.e01.model.Municipio;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -32,35 +30,29 @@ import javax.ws.rs.core.Response;
 @Stateless
 @Path("/municipios")
 public class MunicipioEndpoint {
-    
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
 
-    private Municipio buscarMunicipio(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Municipio u JOIN FETCH u.departamento WHERE u.id = :parametro", Municipio.class)
-                    .setParameter("parametro", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    final MunicipioDao mnDao;
+
+    public MunicipioEndpoint() {
+        this.mnDao = null;
+    }
+
+    @Inject
+    public MunicipioEndpoint(MunicipioDao mnDao) {
+        this.mnDao = mnDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Municipio> findAll() {
-        List<Municipio> cr = this.em
-                .createQuery("SELECT u FROM Municipio u JOIN FETCH u.departamento", Municipio.class)
-                .getResultList();
-        return cr;
+        return this.mnDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Municipio mn = this.buscarMunicipio(id);
+        Municipio mn = this.mnDao.find(id);
 
         if (mn == null) {
             return Response
@@ -77,35 +69,14 @@ public class MunicipioEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(MunicipioDto dto) {
-        Municipio mn = new Municipio(
-                dto.getCodigo(),
-                dto.getNombre(),
-                this.em.find(Departamento.class, dto.getDepartamento())
-        );
-
-        this.em.persist(mn);
-
+        Municipio mn = this.mnDao.save(dto);
         return Response.ok(mn).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(MunicipioDto dto) throws RollbackException {
-        Municipio mn = this.buscarMunicipio(dto.getId());
-
-        if (mn == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        mn.setCodigo(dto.getCodigo());
-        mn.setNombre(dto.getNombre());
-        mn.setDepartamento(this.em.find(Departamento.class, dto.getDepartamento()));
-
-        this.em.merge(mn);
+        Municipio mn = this.mnDao.edit(dto);
         return Response.ok(mn).build();
     }
 
@@ -113,17 +84,7 @@ public class MunicipioEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Municipio mn = this.buscarMunicipio(id);
-
-        if (mn == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(mn);
+        Municipio mn = this.mnDao.remove(id);
         return Response.ok(mn).build();
     }
 

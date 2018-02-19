@@ -1,14 +1,11 @@
 package com.edutech.javaee.s03.e01.resources;
 
+import com.edutech.javaee.s03.e01.dao.DepartamentoDao;
 import com.edutech.javaee.s03.e01.dto.DepartamentoDto;
 import com.edutech.javaee.s03.e01.model.Departamento;
-import com.edutech.javaee.s03.e01.model.Municipio;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
+import javax.inject.Inject;
 import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -29,44 +26,28 @@ import javax.ws.rs.core.Response;
 @Path("/departamentos")
 public class DepartamentoEndpoint {
 
-    @PersistenceContext(unitName = "primary")
-    EntityManager em;
+    final DepartamentoDao dptDao;
 
-    private Departamento buscarDepartamento(Integer id) {
-        try {
-            return this.em
-                    .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipios WHERE u.id = :parametro", Departamento.class)
-                    .setParameter("parametro", id)
-                    .getSingleResult();
-        } catch (NoResultException nre) {
-            return null;
-        }
+    public DepartamentoEndpoint() {
+        this.dptDao = null;
     }
 
-    private List<Municipio> buscarMunicipios(List<Integer> ids) {
-        List<Municipio> municipios = new ArrayList<Municipio>();
-
-        for (Integer municipio : ids) {
-            municipios.add(this.em.find(Municipio.class, municipio));
-        }
-
-        return municipios;
+    @Inject
+    public DepartamentoEndpoint(DepartamentoDao dptDao) {
+        this.dptDao = dptDao;
     }
 
     @GET
     @Produces({"application/json"})
     public List<Departamento> findAll() {
-        List<Departamento> cr = this.em
-                .createQuery("SELECT u FROM Departamento u JOIN FETCH u.municipios", Departamento.class)
-                .getResultList();
-        return cr;
+        return this.dptDao.findAll();
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Departamento dp = this.buscarDepartamento(id);
+        Departamento dp = this.dptDao.find(id);
 
         if (dp == null) {
             return Response
@@ -83,37 +64,14 @@ public class DepartamentoEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(DepartamentoDto dto) {
-        List<Municipio> municipios = buscarMunicipios(dto.getMunicipios());
-
-        Departamento ap = new Departamento(
-                dto.getCodigo(),
-                dto.getNombre(),
-                municipios
-        );
-
-        this.em.persist(ap);
-
+        Departamento ap = this.dptDao.save(dto);
         return Response.ok(ap).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(DepartamentoDto dto) throws RollbackException {
-        Departamento dp = this.buscarDepartamento(dto.getId());
-
-        if (dp == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        dp.setCodigo(dto.getCodigo());
-        dp.setNombre(dto.getNombre());
-        dp.setMunicipios(buscarMunicipios(dto.getMunicipios()));
-
-        this.em.merge(dp);
+        Departamento dp = this.dptDao.edit(dto);
         return Response.ok(dp).build();
     }
 
@@ -121,17 +79,7 @@ public class DepartamentoEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Departamento dp = this.buscarDepartamento(id);
-
-        if (dp == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .type(MediaType.TEXT_HTML)
-                    .entity("Recurso no encontrado")
-                    .build();
-        }
-
-        this.em.remove(dp);
+        Departamento dp = this.dptDao.remove(id);
         return Response.ok(dp).build();
     }
 }
