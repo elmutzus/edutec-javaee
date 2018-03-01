@@ -7,7 +7,7 @@ package org.chilerobank.model;
 
 /**
  *
- * @author BDGDSA
+ * @author Elder Mutzus <elmutzus@gmail.com>
  */
 public class ParametroSistema {
     
