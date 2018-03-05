@@ -39,14 +39,9 @@ public class Usuario implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
 
-    private String mimeType;
     private String nombre;
-    private String nombreArchivo;
     private String password;
     private String telefono;
-
-    @Transient
-    private String fechaNacimientoConFormato;
 
     @JoinColumn(name = "ID_ROL", referencedColumnName = "ID")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -55,17 +50,24 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String codigo, String email, Date fechaNacimiento, String mimeType, String nombre, String nombreArchivo, String password, String telefono, String fechaNacimientoConFormato, Rol rol) {
+    public Usuario(Integer id, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
         this.id = id;
         this.codigo = codigo;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
-        this.mimeType = mimeType;
         this.nombre = nombre;
-        this.nombreArchivo = nombreArchivo;
         this.password = password;
         this.telefono = telefono;
-        this.fechaNacimientoConFormato = fechaNacimientoConFormato;
+        this.rol = rol;
+    }
+
+    public Usuario(String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
+        this.codigo = codigo;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.nombre = nombre;
+        this.password = password;
+        this.telefono = telefono;
         this.rol = rol;
     }
 
@@ -98,24 +100,10 @@ public class Usuario implements Serializable {
     }
 
     /**
-     * @return the mimeType
-     */
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    /**
      * @return the nombre
      */
     public String getNombre() {
         return nombre;
-    }
-
-    /**
-     * @return the nombreArchivo
-     */
-    public String getNombreArchivo() {
-        return nombreArchivo;
     }
 
     /**
@@ -130,13 +118,6 @@ public class Usuario implements Serializable {
      */
     public String getTelefono() {
         return telefono;
-    }
-
-    /**
-     * @return the fechaNacimientoConFormato
-     */
-    public String getFechaNacimientoConFormato() {
-        return fechaNacimientoConFormato;
     }
 
     /**
@@ -175,24 +156,10 @@ public class Usuario implements Serializable {
     }
 
     /**
-     * @param mimeType the mimeType to set
-     */
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    /**
      * @param nombre the nombre to set
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    /**
-     * @param nombreArchivo the nombreArchivo to set
-     */
-    public void setNombreArchivo(String nombreArchivo) {
-        this.nombreArchivo = nombreArchivo;
     }
 
     /**
@@ -207,13 +174,6 @@ public class Usuario implements Serializable {
      */
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    /**
-     * @param fechaNacimientoConFormato the fechaNacimientoConFormato to set
-     */
-    public void setFechaNacimientoConFormato(String fechaNacimientoConFormato) {
-        this.fechaNacimientoConFormato = fechaNacimientoConFormato;
     }
 
     /**

@@ -5,6 +5,8 @@
  */
 package org.chilerobank.dto;
 
+import java.util.Date;
+
 /**
  *
  * @author Elder Mutzus <elmutzus@gmail.com>
@@ -12,78 +14,138 @@ package org.chilerobank.dto;
 public class UsuarioDto {
 
     private Integer id;
+    private Integer rol;
     private String codigo;
-    private String password;
-    private String nombre;
-    private String telefono;
     private String email;
-    private Integer idRol;
-
-    public UsuarioDto(Integer id, String codigo, String nombre, String telefono, String email) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.telefono = telefono;
-        this.email = email;
-        this.password = null;
-    }
+    private Date fechaNacimiento;
+    private String nombre;
+    private String password;
+    private String telefono;
 
     public UsuarioDto() {
     }
 
+    public UsuarioDto(Integer id, Integer rol, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono) {
+        this.id = id;
+        this.rol = rol;
+        this.codigo = codigo;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.nombre = nombre;
+        this.password = password;
+        this.telefono = telefono;
+    }
+
+    /**
+     * @return the id
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    /**
+     * @return the rol
+     */
+    public Integer getRol() {
+        return rol;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    /**
+     * @param rol the rol to set
+     */
+    public void setRol(Integer rol) {
+        this.rol = rol;
     }
 
+    /**
+     * @return the codigo
+     */
     public String getCodigo() {
         return codigo;
     }
 
+    /**
+     * @param codigo the codigo to set
+     */
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
+    /**
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * @param email the email to set
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * @return the fechaNacimiento
+     */
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    /**
+     * @param fechaNacimiento the fechaNacimiento to set
+     */
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    /**
+     * @return the password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * @param password the password to set
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public Integer getIdRol() {
-        return idRol;
+    /**
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setIdRol(Integer idRol) {
-        this.idRol = idRol;
+    /**
+     * @param telefono the telefono to set
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
+
 }
