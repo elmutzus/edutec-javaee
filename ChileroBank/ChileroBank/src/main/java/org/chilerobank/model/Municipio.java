@@ -6,6 +6,7 @@
 package org.chilerobank.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,15 +23,19 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "MUNICIPIO")
+@Table(name = "municipio")
 public class Municipio implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipioGen")
     @SequenceGenerator(name = "municipioGen", sequenceName = "municipio_seq", initialValue = 10)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "codigo")
     private String codigo;
+    
+    @Column(name = "nombre")
     private String nombre;
 
     @JoinColumn(name = "ID_DEPARTAMENTO", referencedColumnName = "ID")

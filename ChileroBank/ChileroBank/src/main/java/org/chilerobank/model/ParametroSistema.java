@@ -6,6 +6,7 @@
 package org.chilerobank.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,10 +25,13 @@ public class ParametroSistema implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "parametroGen")
     @SequenceGenerator(name = "parametroGen", sequenceName = "parametro_seq", initialValue = 10)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "nombre")
     private String nombre;
 
+    @Column(name = "valor")
     private String valor;
 
     public ParametroSistema() {

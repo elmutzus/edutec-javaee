@@ -23,12 +23,12 @@ import javax.persistence.Table;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "tipo_cuenta")
-public class TipoCuenta {
+@Table(name = "operacion")
+public class Operacion {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tipoCuentaGen")
-    @SequenceGenerator(name = "tipoCuentaGen", sequenceName = "tipoCuenta_seq", initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "operacionGen")
+    @SequenceGenerator(name = "operacionGen", sequenceName = "operacion_seq", initialValue = 10)
     @Column(name = "id")
     private Integer id;
 
@@ -38,29 +38,24 @@ public class TipoCuenta {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "tasaInteres")
-    private Float tasaInteres;
+    @JoinColumn(name = "transaccion", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "operacion", fetch = FetchType.LAZY)
+    private List<Transaccion> transacciones;
 
-    @JoinColumn(name = "cuenta", referencedColumnName = "id")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipo_cuenta", fetch = FetchType.LAZY)
-    private List<Cuenta> cuentas;
-
-    public TipoCuenta() {
+    public Operacion() {
     }
 
-    public TipoCuenta(Integer id, String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
+    public Operacion(Integer id, String nombre, String descripcion, List<Transaccion> transacciones) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
+        this.transacciones = transacciones;
     }
 
-    public TipoCuenta(String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
+    public Operacion(String nombre, String descripcion, List<Transaccion> transacciones) {
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
+        this.transacciones = transacciones;
     }
 
     /**
@@ -106,31 +101,17 @@ public class TipoCuenta {
     }
 
     /**
-     * @return the tasaInteres
+     * @return the transacciones
      */
-    public Float getTasaInteres() {
-        return tasaInteres;
+    public List<Transaccion> getTransacciones() {
+        return transacciones;
     }
 
     /**
-     * @param tasaInteres the tasaInteres to set
+     * @param transacciones the transacciones to set
      */
-    public void setTasaInteres(Float tasaInteres) {
-        this.tasaInteres = tasaInteres;
-    }
-
-    /**
-     * @return the cuentas
-     */
-    public List<Cuenta> getCuentas() {
-        return cuentas;
-    }
-
-    /**
-     * @param cuentas the cuentas to set
-     */
-    public void setCuentas(List<Cuenta> cuentas) {
-        this.cuentas = cuentas;
+    public void setTransacciones(List<Transaccion> transacciones) {
+        this.transacciones = transacciones;
     }
 
 }

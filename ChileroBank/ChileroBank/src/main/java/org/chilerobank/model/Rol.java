@@ -19,16 +19,19 @@ import javax.persistence.Table;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "ROL")
+@Table(name = "rol")
 public class Rol implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rolGen")
     @SequenceGenerator(name = "rolGen", sequenceName = "rol_seq", initialValue = 10)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "nombre")
     private String nombre;
+    
+    @Column(name = "descripcion")
     private String descripcion;
 
     public Rol() {
