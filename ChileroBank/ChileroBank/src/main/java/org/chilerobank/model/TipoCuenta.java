@@ -14,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,6 +26,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tipo_cuenta")
+@NamedQueries({
+    // Distinct
+    @NamedQuery(name = "tipoCuenta.findAll", query = "select DISTINCT d from tipoCuenta d JOIN FETCH d.cuentas")
+    ,
+    //JOIN FETCH
+    @NamedQuery(name = "tipoCuenta.findById", query = "select d from tipoCuenta d JOIN FETCH d.cuentas WHERE d.id = :id")
+})
 public class TipoCuenta {
 
     @Id

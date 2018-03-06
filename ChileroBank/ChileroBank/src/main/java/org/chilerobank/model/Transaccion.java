@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -25,6 +27,13 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "transaccion")
+@NamedQueries({
+    // Distinct
+    @NamedQuery(name = "transaccion.findAll", query = "select DISTINCT d from transaccion d JOIN FETCH d.cuenta")
+    ,
+    //JOIN FETCH
+    @NamedQuery(name = "transaccion.findById", query = "select d from transaccion d JOIN FETCH d.cuenta WHERE d.id = :id")
+})
 public class Transaccion {
 
     @Id

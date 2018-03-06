@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
@@ -24,6 +26,13 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "municipio")
+@NamedQueries({
+    // Distinct
+    @NamedQuery(name = "municipio.findAll", query = "select DISTINCT d from municipio d JOIN FETCH d.clientes")
+    ,
+    //JOIN FETCH
+    @NamedQuery(name = "municipio.findById", query = "select d from municipio d JOIN FETCH d.clientes WHERE d.id = :id")
+})
 public class Municipio implements Serializable {
 
     @Id

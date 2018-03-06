@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,7 +21,14 @@ import javax.persistence.Table;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "PARAMETRO_SISTEMA")
+@Table(name = "parametro_sistema")
+@NamedQueries({
+    // Distinct
+    @NamedQuery(name = "parametroSistema.findAll", query = "select DISTINCT d from parametroSistema d")
+    ,
+    //JOIN FETCH
+    @NamedQuery(name = "parametroSistema.findById", query = "select d from parametroSistema d WHERE d.id = :id")
+})
 public class ParametroSistema implements Serializable {
 
     @Id
