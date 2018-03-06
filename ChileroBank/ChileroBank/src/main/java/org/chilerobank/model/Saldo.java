@@ -44,7 +44,7 @@ public class Saldo {
 
     @JoinColumn(name = "cuenta", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Integer cuenta;
+    private Cuenta cuenta;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
@@ -53,13 +53,13 @@ public class Saldo {
     public Saldo() {
     }
 
-    public Saldo(Integer id, Integer cuenta, Date fecha) {
+    public Saldo(Integer id, Cuenta cuenta, Date fecha) {
         this.id = id;
         this.cuenta = cuenta;
         this.fecha = fecha;
     }
 
-    public Saldo(Integer cuenta, Date fecha) {
+    public Saldo(Cuenta cuenta, Date fecha) {
         this.cuenta = cuenta;
         this.fecha = fecha;
     }
@@ -81,14 +81,14 @@ public class Saldo {
     /**
      * @return the cuenta
      */
-    public Integer getCuenta() {
+    public Cuenta getCuenta() {
         return cuenta;
     }
 
     /**
      * @param cuenta the cuenta to set
      */
-    public void setCuenta(Integer cuenta) {
+    public void setCuenta(Cuenta cuenta) {
         this.cuenta = cuenta;
     }
 
