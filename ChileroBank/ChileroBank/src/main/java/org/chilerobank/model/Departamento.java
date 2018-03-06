@@ -8,6 +8,7 @@ package org.chilerobank.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ import javax.persistence.Table;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "DEPARTAMENTO")
+@Table(name = "departamento")
 @NamedQueries({
     // Distinct
     @NamedQuery(name = "Departamento.findAll", query = "Select DISTINCT d from Departamento d LEFT JOIN FETCH d.municipios")
@@ -38,9 +39,13 @@ public class Departamento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departamentoGen")
     @SequenceGenerator(name = "departamentoGen", sequenceName = "depto_seq", initialValue = 10)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "codigo")
     private String codigo;
+    
+    @Column(name = "nombre")
     private String nombre;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamento", fetch = FetchType.LAZY)
