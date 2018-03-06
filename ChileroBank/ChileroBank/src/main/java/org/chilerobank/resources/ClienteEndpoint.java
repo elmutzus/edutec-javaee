@@ -111,15 +111,15 @@ public class ClienteEndpoint {
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Cliente usr = this.clDao.remove(id);
+        Cliente cl = this.clDao.remove(id);
 
-        if (usr == null) {
+        if (cl == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(usr).build();
+        return Response.ok(cl).build();
     }
 }
