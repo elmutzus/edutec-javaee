@@ -50,30 +50,24 @@ public class Cliente {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Municipio municipio;
 
-    @JoinColumn(name = "departamento", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Departamento departamento;
-
     public Cliente() {
     }
 
-    public Cliente(Integer id, String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, Departamento departamento) {
+    public Cliente(Integer id, String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.nit = nit;
         this.fechaNacimiento = fechaNacimiento;
         this.municipio = municipio;
-        this.departamento = departamento;
     }
 
-    public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, Departamento departamento) {
+    public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.nit = nit;
         this.fechaNacimiento = fechaNacimiento;
         this.municipio = municipio;
-        this.departamento = departamento;
     }
 
     /**
@@ -159,19 +153,4 @@ public class Cliente {
     public void setMunicipio(Municipio municipio) {
         this.municipio = municipio;
     }
-
-    /**
-     * @return the departamento
-     */
-    public Departamento getDepartamento() {
-        return departamento;
-    }
-
-    /**
-     * @param departamento the departamento to set
-     */
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
-    }
-
 }

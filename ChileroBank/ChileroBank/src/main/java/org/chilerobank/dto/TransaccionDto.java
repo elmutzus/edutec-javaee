@@ -3,63 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.chilerobank.model;
+package org.chilerobank.dto;
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
-@Entity
-@Table(name = "transaccion")
-public class Transaccion {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transaccionGen")
-    @SequenceGenerator(name = "transaccionGen", sequenceName = "transaccion_seq", initialValue = 10)
-    @Column(name = "id")
+public class TransaccionDto {
     private Integer id;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_movimiento")
     private Date fechaMovimiento;
-
-    @Column(name = "monto")
     private Float monto;
+    private Integer cuenta;
+    private Integer operacion;
 
-    @JoinColumn(name = "cuenta", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Cuenta cuenta;
-
-    @JoinColumn(name = "operacion", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Operacion operacion;
-
-    public Transaccion() {
+    public TransaccionDto() {
     }
 
-    public Transaccion(Integer id, Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
+    public TransaccionDto(Integer id, Date fechaMovimiento, Float monto, Integer cuenta, Integer operacion) {
         this.id = id;
         this.fechaMovimiento = fechaMovimiento;
         this.monto = monto;
         this.cuenta = cuenta;
         this.operacion = operacion;
     }
-
-    public Transaccion(Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
+    
+    public TransaccionDto(Date fechaMovimiento, Float monto, Integer cuenta, Integer operacion) {
         this.fechaMovimiento = fechaMovimiento;
         this.monto = monto;
         this.cuenta = cuenta;
@@ -111,29 +81,30 @@ public class Transaccion {
     /**
      * @return the cuenta
      */
-    public Cuenta getCuenta() {
+    public Integer getCuenta() {
         return cuenta;
     }
 
     /**
      * @param cuenta the cuenta to set
      */
-    public void setCuenta(Cuenta cuenta) {
+    public void setCuenta(Integer cuenta) {
         this.cuenta = cuenta;
     }
 
     /**
      * @return the operacion
      */
-    public Operacion getOperacion() {
+    public Integer getOperacion() {
         return operacion;
     }
 
     /**
      * @param operacion the operacion to set
      */
-    public void setOperacion(Operacion operacion) {
+    public void setOperacion(Integer operacion) {
         this.operacion = operacion;
     }
-
+    
+    
 }

@@ -36,6 +36,16 @@ public class UsuarioDto {
         this.telefono = telefono;
     }
 
+    public UsuarioDto(Integer rol, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono) {
+        this.rol = rol;
+        this.codigo = codigo;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.nombre = nombre;
+        this.password = password;
+        this.telefono = telefono;
+    }
+
     /**
      * @return the id
      */
