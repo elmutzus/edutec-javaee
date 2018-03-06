@@ -7,6 +7,7 @@ package org.chilerobank.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,25 +26,35 @@ import javax.persistence.Transient;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Entity
-@Table(name = "USUARIO")
+@Table(name = "usuario")
 public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarioGen")
     @SequenceGenerator(name = "usuarioGen", sequenceName = "usuario_seq", initialValue = 10)
+    @Column(name = "id")
     private Integer id;
 
+    @Column(name = "codigo")
     private String codigo;
+
+    @Column(name = "email")
     private String email;
 
     @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
+    @Column(name = "nombre")
     private String nombre;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "telefono")
     private String telefono;
 
-    @JoinColumn(name = "ID_ROL", referencedColumnName = "ID")
+    @JoinColumn(name = "rol", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Rol rol;
 
