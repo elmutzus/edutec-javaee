@@ -21,10 +21,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.chilerobank.dao.DepartamentoDao;
 import org.chilerobank.dao.MunicipioDao;
-import org.chilerobank.dto.DepartamentoDto;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.MunicipioDto;
-import org.chilerobank.model.Departamento;
 import org.chilerobank.model.Municipio;
 
 /**
