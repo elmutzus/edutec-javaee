@@ -30,7 +30,7 @@ import org.chilerobank.model.Saldo;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Stateless
-@Path("/operacion")
+@Path("/saldos")
 public class SaldoEndpoint {
 
     final SaldoDao slDao;

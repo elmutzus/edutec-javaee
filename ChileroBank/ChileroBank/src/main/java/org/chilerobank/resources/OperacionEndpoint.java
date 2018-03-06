@@ -32,7 +32,7 @@ import org.chilerobank.model.Transaccion;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 @Stateless
-@Path("/operacion")
+@Path("/operaciones")
 public class OperacionEndpoint {
 
     final OperacionDao opDao;
