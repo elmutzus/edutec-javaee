@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -95,6 +96,7 @@ public class Rol implements Serializable {
     /**
      * @return the usuarios
      */
+    @XmlTransient
     public List<Usuario> getUsuarios() {
         return usuarios;
     }
