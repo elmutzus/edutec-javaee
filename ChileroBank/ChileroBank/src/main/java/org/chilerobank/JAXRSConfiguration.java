@@ -9,7 +9,7 @@ import javax.ws.rs.core.Application;
  *
  * @author airhacks.com
  */
-@ApplicationPath("banking")
+@ApplicationPath("api/banking")
 public class JAXRSConfiguration extends Application {
 
 }
