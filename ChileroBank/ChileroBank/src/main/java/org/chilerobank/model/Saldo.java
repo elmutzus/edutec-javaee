@@ -29,10 +29,10 @@ import javax.persistence.TemporalType;
 @Table(name = "saldo")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "saldo.findAll", query = "select DISTINCT d from saldo d JOIN FETCH d.cuenta")
+    @NamedQuery(name = "saldo.findAll", query = "Select DISTINCT d from Saldo d JOIN FETCH d.cuenta")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "saldo.findById", query = "select d from saldo d JOIN FETCH d.cuenta WHERE d.id = :id")
+    @NamedQuery(name = "saldo.findById", query = "Select d from Saldo d JOIN FETCH d.cuenta WHERE d.id = :id")
 })
 public class Saldo {
 

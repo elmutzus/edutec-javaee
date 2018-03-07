@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "select DISTINCT d from municipio d JOIN FETCH d.clientes")
+    @NamedQuery(name = "municipio.findAll", query = "Select DISTINCT d from Municipio d JOIN FETCH d.departamento")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "municipio.findById", query = "select d from municipio d JOIN FETCH d.clientes WHERE d.id = :id")
+    @NamedQuery(name = "municipio.findById", query = "Select d from Municipio d JOIN FETCH d.departamento WHERE d.id = :id")
 })
 public class Municipio implements Serializable {
 

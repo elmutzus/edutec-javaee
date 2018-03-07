@@ -32,10 +32,10 @@ import javax.persistence.TemporalType;
 @Table(name = "cuenta")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "cuenta.findAll", query = "select DISTINCT d from cuenta d JOIN FETCH d.cliente")
+    @NamedQuery(name = "cuenta.findAll", query = "Select DISTINCT d from Cuenta d JOIN FETCH d.cliente")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "cuenta.findById", query = "select d from cuenta d JOIN FETCH d.cliente WHERE d.id = :id")
+    @NamedQuery(name = "cuenta.findById", query = "Select d from Cuenta d JOIN FETCH d.cliente WHERE d.id = :id")
 })
 public class Cuenta {
 

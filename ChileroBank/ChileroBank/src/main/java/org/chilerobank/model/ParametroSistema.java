@@ -24,10 +24,10 @@ import javax.persistence.Table;
 @Table(name = "parametro_sistema")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "parametroSistema.findAll", query = "select DISTINCT d from parametroSistema d")
+    @NamedQuery(name = "parametroSistema.findAll", query = "Select DISTINCT d from ParametroSistema d")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "parametroSistema.findById", query = "select d from parametroSistema d WHERE d.id = :id")
+    @NamedQuery(name = "parametroSistema.findById", query = "Select d from ParametroSistema d WHERE d.id = :id")
 })
 public class ParametroSistema implements Serializable {
 

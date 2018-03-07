@@ -13,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -28,10 +27,10 @@ import javax.persistence.Table;
 @Table(name = "tipo_cuenta")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "tipoCuenta.findAll", query = "select DISTINCT d from tipoCuenta d JOIN FETCH d.cuentas")
+    @NamedQuery(name = "tipoCuenta.findAll", query = "Select DISTINCT d from TipoCuenta d JOIN FETCH d.cuentas")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "tipoCuenta.findById", query = "select d from tipoCuenta d JOIN FETCH d.cuentas WHERE d.id = :id")
+    @NamedQuery(name = "tipoCuenta.findById", query = "Select d from TipoCuenta d JOIN FETCH d.cuentas WHERE d.id = :id")
 })
 public class TipoCuenta {
 
@@ -50,7 +49,7 @@ public class TipoCuenta {
     @Column(name = "tasaInteres")
     private Float tasaInteres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipo_cuenta", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoCuenta", fetch = FetchType.LAZY)
     private List<Cuenta> cuentas;
 
     public TipoCuenta() {

@@ -28,11 +28,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "cliente")
 @NamedQueries({
-    // Distinct
-    @NamedQuery(name = "cliente.findAll", query = "select DISTINCT d from cliente d JOIN FETCH d.municipio")
+    @NamedQuery(name = "cliente.findAll", query = "Select DISTINCT d from Cliente d JOIN FETCH d.municipio")
     ,
-    //JOIN FETCH
-    @NamedQuery(name = "cliente.findById", query = "select d from cliente d JOIN FETCH d.municipio WHERE d.id = :id")
+    @NamedQuery(name = "cliente.findById", query = "Select d from Cliente d JOIN FETCH d.municipio WHERE d.id = :id")
 })
 public class Cliente {
 

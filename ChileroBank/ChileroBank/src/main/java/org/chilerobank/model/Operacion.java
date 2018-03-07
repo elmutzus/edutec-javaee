@@ -28,10 +28,10 @@ import javax.persistence.Table;
 @Table(name = "operacion")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "operacion.findAll", query = "select DISTINCT d from operacion d JOIN FETCH d.transacciones")
+    @NamedQuery(name = "operacion.findAll", query = "Select DISTINCT d from Operacion d JOIN FETCH d.transacciones")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "operacion.findById", query = "select d from operacion d JOIN FETCH d.transacciones WHERE d.id = :id")
+    @NamedQuery(name = "operacion.findById", query = "Select d from Operacion d JOIN FETCH d.transacciones WHERE d.id = :id")
 })
 public class Operacion {
 
