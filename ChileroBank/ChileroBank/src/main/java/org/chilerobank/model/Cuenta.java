@@ -63,11 +63,9 @@ public class Cuenta {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cliente cliente;
 
-    @JoinColumn(name = "saldo", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta", fetch = FetchType.LAZY)
     private List<Saldo> saldos;
 
-    @JoinColumn(name = "transaccion", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta", fetch = FetchType.LAZY)
     private List<Transaccion> transacciones;
 

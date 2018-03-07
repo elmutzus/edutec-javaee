@@ -50,7 +50,6 @@ public class TipoCuenta {
     @Column(name = "tasaInteres")
     private Float tasaInteres;
 
-    @JoinColumn(name = "cuenta", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipo_cuenta", fetch = FetchType.LAZY)
     private List<Cuenta> cuentas;
 

@@ -47,7 +47,6 @@ public class Operacion {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @JoinColumn(name = "transaccion", referencedColumnName = "id")
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operacion", fetch = FetchType.LAZY)
     private List<Transaccion> transacciones;
 
