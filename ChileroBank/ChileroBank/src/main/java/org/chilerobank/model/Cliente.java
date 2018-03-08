@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cliente")
 @NamedQueries({
-    @NamedQuery(name = "cliente.findAll", query = "Select DISTINCT d from Cliente d JOIN FETCH d.municipio")
+    @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl")
     ,
-    @NamedQuery(name = "cliente.findById", query = "Select d from Cliente d JOIN FETCH d.municipio WHERE d.id = :id")
+    @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl WHERE cl.id = :id")
 })
 public class Cliente {
 
