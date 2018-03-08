@@ -23,6 +23,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -166,6 +167,7 @@ public class Cuenta {
     /**
      * @return the cliente
      */
+    @XmlTransient
     public Cliente getCliente() {
         return cliente;
     }

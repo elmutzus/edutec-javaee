@@ -20,6 +20,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -150,6 +151,7 @@ public class Cliente {
     /**
      * @return the municipio
      */
+    @XmlTransient
     public Municipio getMunicipio() {
         return municipio;
     }

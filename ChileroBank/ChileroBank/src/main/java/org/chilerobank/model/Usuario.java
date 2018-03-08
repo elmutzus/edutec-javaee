@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -133,6 +134,7 @@ public class Usuario implements Serializable {
     /**
      * @return the rol
      */
+    @XmlTransient
     public Rol getRol() {
         return rol;
     }
