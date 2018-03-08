@@ -47,10 +47,10 @@ public class TipoCuenta {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @Column(name = "tasaInteres")
+    @Column(name = "tasa_interes")
     private Float tasaInteres;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoCuenta", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tipoCuenta")
     private List<Cuenta> cuentas;
 
     public TipoCuenta() {

@@ -6,9 +6,9 @@
 package org.chilerobank.model;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,9 +30,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cliente")
 @NamedQueries({
-    @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl LEFT JOIN FETCH cl.municipio")
+    @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl LEFT JOIN FETCH cl.cuentas")
     ,
-    @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl LEFT JOIN FETCH cl.municipio WHERE cl.id = :id")
+    @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl LEFT JOIN FETCH cl.cuentas WHERE cl.id = :id")
 })
 public class Cliente {
 
@@ -54,29 +55,12 @@ public class Cliente {
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
-    @JoinColumn(name = "Municipio", referencedColumnName = "Id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "Municipio")
     private Municipio municipio;
 
-    public Cliente() {
-    }
-
-    public Cliente(Integer id, String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.nit = nit;
-        this.fechaNacimiento = fechaNacimiento;
-        this.municipio = municipio;
-    }
-
-    public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.nit = nit;
-        this.fechaNacimiento = fechaNacimiento;
-        this.municipio = municipio;
-    }
+    @OneToMany(mappedBy = "cliente")
+    private List<Cuenta> cuentas;
 
     /**
      * @return the id
@@ -161,5 +145,13 @@ public class Cliente {
      */
     public void setMunicipio(Municipio municipio) {
         this.municipio = municipio;
+    }
+
+    public List<Cuenta> getCuentas() {
+        return this.cuentas;
+    }
+
+    public void setCuentas(List<Cuenta> cuentas) {
+        this.cuentas = cuentas;
     }
 }

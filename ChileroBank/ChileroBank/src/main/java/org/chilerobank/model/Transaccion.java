@@ -50,31 +50,13 @@ public class Transaccion {
     @Column(name = "monto")
     private Float monto;
 
-    @JoinColumn(name = "cuenta", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "cuenta")
     private Cuenta cuenta;
 
-    @JoinColumn(name = "operacion", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "operacion")
     private Operacion operacion;
-
-    public Transaccion() {
-    }
-
-    public Transaccion(Integer id, Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
-        this.id = id;
-        this.fechaMovimiento = fechaMovimiento;
-        this.monto = monto;
-        this.cuenta = cuenta;
-        this.operacion = operacion;
-    }
-
-    public Transaccion(Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
-        this.fechaMovimiento = fechaMovimiento;
-        this.monto = monto;
-        this.cuenta = cuenta;
-        this.operacion = operacion;
-    }
 
     /**
      * @return the id
@@ -136,6 +118,7 @@ public class Transaccion {
     /**
      * @return the operacion
      */
+    @XmlTransient
     public Operacion getOperacion() {
         return operacion;
     }

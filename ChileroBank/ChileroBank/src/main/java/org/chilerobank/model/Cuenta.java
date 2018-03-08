@@ -7,10 +7,8 @@ package org.chilerobank.model;
 
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,10 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "cuenta")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "cuenta.findAll", query = "Select DISTINCT d from Cuenta d LEFT JOIN FETCH d.cliente")
+    @NamedQuery(name = "cuenta.findAll", query = "SELECT DISTINCT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "cuenta.findById", query = "Select d from Cuenta d LEFT JOIN FETCH d.cliente WHERE d.id = :id")
+    @NamedQuery(name = "cuenta.findById", query = "SELECT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente WHERE cn.id = :id")
 })
 public class Cuenta {
 
@@ -56,43 +54,19 @@ public class Cuenta {
     @Column(name = "estado")
     private Integer estado;
 
-    @JoinColumn(name = "tipo_cuenta", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "tipo_cuenta_id")
     private TipoCuenta tipoCuenta;
 
-    @JoinColumn(name = "cliente", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cuenta")
     private List<Saldo> saldos;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuenta", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "cuenta")
     private List<Transaccion> transacciones;
-
-    public Cuenta() {
-    }
-
-    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
-        this.id = id;
-        this.moneda = moneda;
-        this.fechaApertura = fechaApertura;
-        this.estado = estado;
-        this.tipoCuenta = tipoCuenta;
-        this.cliente = cliente;
-        this.saldos = saldos;
-        this.transacciones = transacciones;
-    }
-
-    public Cuenta(String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
-        this.moneda = moneda;
-        this.fechaApertura = fechaApertura;
-        this.estado = estado;
-        this.tipoCuenta = tipoCuenta;
-        this.cliente = cliente;
-        this.saldos = saldos;
-        this.transacciones = transacciones;
-    }
 
     /**
      * @return the id
@@ -153,6 +127,7 @@ public class Cuenta {
     /**
      * @return the tipoCuenta
      */
+    @XmlTransient
     public TipoCuenta getTipoCuenta() {
         return tipoCuenta;
     }

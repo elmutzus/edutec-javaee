@@ -30,10 +30,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "saldo")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "saldo.findAll", query = "Select DISTINCT d from Saldo d JOIN FETCH d.cuenta")
+    @NamedQuery(name = "saldo.findAll", query = "Select DISTINCT d from Saldo d LEFT JOIN FETCH d.cuenta")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "saldo.findById", query = "Select d from Saldo d JOIN FETCH d.cuenta WHERE d.id = :id")
+    @NamedQuery(name = "saldo.findById", query = "Select d from Saldo d LEFT JOIN FETCH d.cuenta WHERE d.id = :id")
 })
 public class Saldo {
 
@@ -43,27 +43,14 @@ public class Saldo {
     @Column(name = "id")
     private Integer id;
 
-    @JoinColumn(name = "cuenta", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cuenta")
+    @ManyToOne
     private Cuenta cuenta;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
     private Date fecha;
 
-    public Saldo() {
-    }
-
-    public Saldo(Integer id, Cuenta cuenta, Date fecha) {
-        this.id = id;
-        this.cuenta = cuenta;
-        this.fecha = fecha;
-    }
-
-    public Saldo(Cuenta cuenta, Date fecha) {
-        this.cuenta = cuenta;
-        this.fecha = fecha;
-    }
 
     /**
      * @return the id
