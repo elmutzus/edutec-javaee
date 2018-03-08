@@ -33,10 +33,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "cuenta")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "cuenta.findAll", query = "Select DISTINCT d from Cuenta d JOIN FETCH d.cliente")
+    @NamedQuery(name = "cuenta.findAll", query = "Select DISTINCT d from Cuenta d LEFT JOIN FETCH d.cliente")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "cuenta.findById", query = "Select d from Cuenta d JOIN FETCH d.cliente WHERE d.id = :id")
+    @NamedQuery(name = "cuenta.findById", query = "Select d from Cuenta d LEFT JOIN FETCH d.cliente WHERE d.id = :id")
 })
 public class Cuenta {
 

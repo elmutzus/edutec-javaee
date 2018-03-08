@@ -6,6 +6,8 @@
 package org.chilerobank.model;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
@@ -28,10 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "Select DISTINCT d from Municipio d JOIN FETCH d.departamento")
+    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "municipio.findById", query = "Select d from Municipio d JOIN FETCH d.departamento WHERE d.id = :id")
+    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes WHERE mn.id = :id")
 })
 public class Municipio implements Serializable {
 
@@ -43,13 +46,16 @@ public class Municipio implements Serializable {
 
     @Column(name = "codigo")
     private String codigo;
-    
+
     @Column(name = "nombre")
     private String nombre;
 
-    @JoinColumn(name = "ID_DEPARTAMENTO", referencedColumnName = "ID")
+    @JoinColumn(name = "departamento", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Departamento departamento;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipio", fetch = FetchType.LAZY)
+    List<Cliente> clientes;
 
     public Municipio() {
     }
@@ -85,5 +91,13 @@ public class Municipio implements Serializable {
 
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
+    }
+
+    public List<Cliente> getClientes() {
+        return this.clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 }

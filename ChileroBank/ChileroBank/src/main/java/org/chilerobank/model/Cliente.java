@@ -29,9 +29,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "cliente")
 @NamedQueries({
-    @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl")
+    @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl LEFT JOIN FETCH cl.municipio")
     ,
-    @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl WHERE cl.id = :id")
+    @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl LEFT JOIN FETCH cl.municipio WHERE cl.id = :id")
 })
 public class Cliente {
 
@@ -54,7 +54,7 @@ public class Cliente {
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
-    @JoinColumn(name = "municipio", referencedColumnName = "id")
+    @JoinColumn(name = "Municipio", referencedColumnName = "Id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Municipio municipio;
 
