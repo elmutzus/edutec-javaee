@@ -45,7 +45,6 @@ public class OperacionDao {
         if (opr != null) {
             opr.setDescripcion(entity.getDescripcion());
             opr.setNombre(entity.getNombre());
-            opr.setTransacciones(entity.getTransacciones());
             this.em.merge(opr);
         }
         return opr;

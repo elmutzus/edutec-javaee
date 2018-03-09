@@ -5,7 +5,6 @@
  */
 package org.chilerobank.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -20,11 +19,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.TipoCuentaDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TipoCuentaDto;
-import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.TipoCuenta;
 
 /**
@@ -36,17 +33,14 @@ import org.chilerobank.model.TipoCuenta;
 public class TipoCuentaEndpoint {
 
     final TipoCuentaDao tpDao;
-    final CuentaDao cnDao;
 
     public TipoCuentaEndpoint() {
         this.tpDao = null;
-        this.cnDao = null;
     }
 
     @Inject
-    public TipoCuentaEndpoint(TipoCuentaDao tpDao, CuentaDao cnDao) {
+    public TipoCuentaEndpoint(TipoCuentaDao tpDao) {
         this.tpDao = tpDao;
-        this.cnDao = cnDao;
     }
 
     @GET

@@ -5,7 +5,6 @@
  */
 package org.chilerobank.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -21,11 +20,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.chilerobank.dao.OperacionDao;
-import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.OperacionDto;
 import org.chilerobank.model.Operacion;
-import org.chilerobank.model.Transaccion;
 
 /**
  *
@@ -36,17 +33,14 @@ import org.chilerobank.model.Transaccion;
 public class OperacionEndpoint {
 
     final OperacionDao opDao;
-    final TransaccionDao trDao;
 
     public OperacionEndpoint() {
         this.opDao = null;
-        this.trDao = null;
     }
 
     @Inject
-    public OperacionEndpoint(OperacionDao opDao, TransaccionDao trDao) {
+    public OperacionEndpoint(OperacionDao opDao) {
         this.opDao = opDao;
-        this.trDao = trDao;
     }
 
     @GET
@@ -80,14 +74,6 @@ public class OperacionEndpoint {
         op.setDescripcion(dto.getDescripcion());
         op.setNombre(dto.getNombre());
 
-        List<Transaccion> trxs = new ArrayList<>();
-
-        for (Integer id : dto.getTransacciones()) {
-            trxs.add(this.trDao.find(id));
-        }
-
-        op.setTransacciones(trxs);
-
         this.opDao.save(op);
         return Response.ok(op).build();
     }
@@ -99,14 +85,6 @@ public class OperacionEndpoint {
 
         op.setDescripcion(dto.getDescripcion());
         op.setNombre(dto.getNombre());
-
-        List<Transaccion> trxs = new ArrayList<>();
-
-        for (Integer id : dto.getTransacciones()) {
-            trxs.add(this.trDao.find(id));
-        }
-
-        op.setTransacciones(trxs);
 
         Operacion updatedMn = this.opDao.edit(op);
         if (updatedMn == null) {

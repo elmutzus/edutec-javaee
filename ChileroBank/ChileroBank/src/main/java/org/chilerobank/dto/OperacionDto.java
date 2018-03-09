@@ -5,8 +5,6 @@
  */
 package org.chilerobank.dto;
 
-import java.util.List;
-
 /**
  *
  * @author Elder Mutzus <elmutzus@gmail.com>
@@ -16,7 +14,6 @@ public class OperacionDto {
     private Integer id;
     private String nombre;
     private String descripcion;
-    private List<Integer> transacciones;
 
     /**
      * @return the id
@@ -58,20 +55,6 @@ public class OperacionDto {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    /**
-     * @return the transacciones
-     */
-    public List<Integer> getTransacciones() {
-        return transacciones;
-    }
-
-    /**
-     * @param transacciones the transacciones to set
-     */
-    public void setTransacciones(List<Integer> transacciones) {
-        this.transacciones = transacciones;
     }
 
 }

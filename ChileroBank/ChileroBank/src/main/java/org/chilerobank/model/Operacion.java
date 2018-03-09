@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "operacion")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "operacion.findAll", query = "Select DISTINCT d from Operacion d JOIN FETCH d.transacciones")
+    @NamedQuery(name = "operacion.findAll", query = "SELECT DISTINCT op FROM Operacion op")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "operacion.findById", query = "Select d from Operacion d JOIN FETCH d.transacciones WHERE d.id = :id")
+    @NamedQuery(name = "operacion.findById", query = "SELECT op FROM Operacion op WHERE op.id = :id")
 })
 public class Operacion {
 
@@ -46,9 +46,6 @@ public class Operacion {
 
     @Column(name = "descripcion")
     private String descripcion;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "operacion", fetch = FetchType.LAZY)
-    private List<Transaccion> transacciones;
 
     /**
      * @return the id
@@ -91,20 +88,4 @@ public class Operacion {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-
-    /**
-     * @return the transacciones
-     */
-    @XmlTransient
-    public List<Transaccion> getTransacciones() {
-        return transacciones;
-    }
-
-    /**
-     * @param transacciones the transacciones to set
-     */
-    public void setTransacciones(List<Transaccion> transacciones) {
-        this.transacciones = transacciones;
-    }
-
 }
