@@ -149,6 +149,7 @@ public class Cliente {
         this.municipio = municipio;
     }
 
+    @XmlTransient
     public List<Cuenta> getCuentas() {
         return this.cuentas;
     }

@@ -65,8 +65,6 @@ public class ClienteEndpoint {
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
-        
-        System.out.println("CLIENTE**********************" + cl.getCuentas().size());
 
         return Response.ok(cl, MediaType.APPLICATION_JSON).build();
     }

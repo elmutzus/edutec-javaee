@@ -159,6 +159,7 @@ public class Cuenta {
     /**
      * @return the saldo
      */
+    @XmlTransient
     public List<Saldo> getSaldos() {
         return saldos;
     }
@@ -173,6 +174,7 @@ public class Cuenta {
     /**
      * @return the transaccion
      */
+    @XmlTransient
     public List<Transaccion> getTransacciones() {
         return transacciones;
     }

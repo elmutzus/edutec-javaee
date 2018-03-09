@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes")
+    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes")
     ,
     //JOIN FETCH
     @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes WHERE mn.id = :id")
@@ -93,6 +93,7 @@ public class Municipio implements Serializable {
         this.departamento = departamento;
     }
 
+    @XmlTransient
     public List<Cliente> getClientes() {
         return this.clientes;
     }

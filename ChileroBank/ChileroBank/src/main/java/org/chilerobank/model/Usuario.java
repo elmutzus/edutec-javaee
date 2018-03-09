@@ -166,6 +166,7 @@ public class Usuario implements Serializable {
     /**
      * @param rol the rol to set
      */
+    @XmlTransient
     public void setRol(Rol rol) {
         this.rol = rol;
     }
