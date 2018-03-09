@@ -28,12 +28,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "departamento")
 @NamedQueries({
-    // Distinct
-    @NamedQuery(name = "Departamento.findAll", query = "Select DISTINCT d from Departamento d LEFT JOIN FETCH d.municipios")
+    @NamedQuery(name = "Departamento.findAll", query = "SELECT DISTINCT d FROM Departamento d LEFT JOIN FETCH d.municipios")
     ,
-    //@NamedQuery(name="Departamento.findAll", query="Select d from Departamento d"),
-    //JOIN FETCH
-    @NamedQuery(name = "Departamento.findById", query = "Select d from Departamento d LEFT JOIN FETCH d.municipios WHERE d.id = :idDepartamento")
+    @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.id = :idDepartamento")
 })
 public class Departamento implements Serializable {
 
@@ -49,7 +46,7 @@ public class Departamento implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(mappedBy = "departamentoId", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     List<Municipio> municipios;
 
     public Departamento() {

@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamentoId")
+    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamentoId WHERE mn.id = :id")
+    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento WHERE mn.id = :id")
 })
 public class Municipio implements Serializable {
 
@@ -48,8 +48,8 @@ public class Municipio implements Serializable {
     private String nombre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "departamento_id")
-    private Departamento departamentoId;
+    @JoinColumn(name = "departamento")
+    private Departamento departamento;
 
     public Integer getId() {
         return id;
@@ -76,11 +76,11 @@ public class Municipio implements Serializable {
     }
 
     @XmlTransient
-    public Departamento getDepartamentoId() {
-        return departamentoId;
+    public Departamento getDepartamento() {
+        return departamento;
     }
 
-    public void setDepartamentoId(Departamento departamento) {
-        this.departamentoId = departamento;
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
 }
