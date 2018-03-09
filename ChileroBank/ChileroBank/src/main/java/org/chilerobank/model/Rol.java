@@ -14,6 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -25,6 +27,11 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "rol")
+@NamedQueries({
+    @NamedQuery(name = "rol.findAll", query = "SELECT DISTINCT r FROM Rol r")
+    ,
+    @NamedQuery(name = "rol.findById", query = "SELECT r FROM Rol r WHERE r.id = :id")
+})
 public class Rol implements Serializable {
 
     @Id
@@ -39,7 +46,7 @@ public class Rol implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rol", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Usuario> usuarios;
 
     /**

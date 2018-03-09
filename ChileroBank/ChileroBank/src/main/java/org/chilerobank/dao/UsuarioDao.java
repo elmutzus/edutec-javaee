@@ -30,8 +30,8 @@ public class UsuarioDao {
     public Usuario find(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT u FROM Usuario u JOIN FETCH u.rol WHERE u.id = :parametro", Usuario.class)
-                    .setParameter("parametro", id)
+                    .createNamedQuery("usuario.findById", Usuario.class)
+                    .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
             return null;
@@ -39,9 +39,7 @@ public class UsuarioDao {
     }
 
     public List<Usuario> findAll() {
-        return this.em
-                .createQuery("SELECT u FROM Usuario u JOIN FETCH u.rol", Usuario.class)
-                .getResultList();
+        return this.em.createNamedQuery("usuario.findAll").getResultList();
     }
 
     public Usuario save(Usuario entity) {

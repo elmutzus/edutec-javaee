@@ -84,7 +84,7 @@ public class UsuarioEndpoint {
         usr.setNombre(dto.getNombre());
         usr.setPassword(dto.getPassword());
         usr.setTelefono(dto.getTelefono());
-        usr.setRol(this.rolDao.find(dto.getRol()));
+        usr.setRol(this.rolDao.find(dto.getRolId()));
 
         this.usuarioDao.save(usr);
         return Response.ok(usr).build();
@@ -101,7 +101,7 @@ public class UsuarioEndpoint {
         usr.setNombre(dto.getNombre());
         usr.setPassword(dto.getPassword());
         usr.setTelefono(dto.getTelefono());
-        usr.setRol(this.rolDao.find(dto.getRol()));
+        usr.setRol(this.rolDao.find(dto.getRolId()));
 
         Usuario updatedUsr = this.usuarioDao.edit(usr);
         if (updatedUsr == null) {

@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.chilerobank.model.Rol;
-import org.chilerobank.model.Rol;
 
 /**
  *
@@ -22,22 +21,20 @@ public class RolDao {
     EntityManager em;
 
     public List<Rol> findAll() {
-        return this.em
-                .createQuery("SELECT r FROM Rol r ", Rol.class)
-                .getResultList();
+        return this.em.createNamedQuery("rol.findAll").getResultList();
     }
 
     public Rol find(Integer id) {
         try {
             return this.em
-                    .createQuery("SELECT r FROM Rol r WHERE r.id = :id", Rol.class)
+                    .createNamedQuery("rol.findById", Rol.class)
                     .setParameter("id", id)
                     .getSingleResult();
         } catch (NoResultException nre) {
             return null;
         }
     }
-    
+
     public Rol save(Rol entity) {
         this.em.persist(entity);
         return entity;
@@ -49,7 +46,7 @@ public class RolDao {
             sl.setDescripcion(entity.getDescripcion());
             sl.setNombre(entity.getNombre());
             sl.setUsuarios(entity.getUsuarios());
-            
+
             this.em.merge(sl);
         }
         return sl;

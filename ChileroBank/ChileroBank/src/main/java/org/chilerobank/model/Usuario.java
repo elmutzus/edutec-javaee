@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,6 +29,11 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "usuario")
+@NamedQueries({
+    @NamedQuery(name = "usuario.findAll", query = "SELECT usr FROM Usuario usr JOIN FETCH usr.rol")
+    ,
+    @NamedQuery(name = "usuario.findById", query = "SELECT usr FROM Usuario usr JOIN FETCH usr.rol WHERE usr.id = :id")
+})
 public class Usuario implements Serializable {
 
     @Id
@@ -54,8 +61,8 @@ public class Usuario implements Serializable {
     @Column(name = "telefono")
     private String telefono;
 
-    @JoinColumn(name = "rol")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rol_id")
     private Rol rol;
 
     /**
@@ -166,7 +173,6 @@ public class Usuario implements Serializable {
     /**
      * @param rol the rol to set
      */
-    @XmlTransient
     public void setRol(Rol rol) {
         this.rol = rol;
     }
