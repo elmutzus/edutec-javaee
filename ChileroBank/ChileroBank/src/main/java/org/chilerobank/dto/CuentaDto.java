@@ -23,29 +23,6 @@ public class CuentaDto {
     private List<Integer> saldos;
     private List<Integer> transacciones;
 
-    public CuentaDto() {
-    }
-
-    public CuentaDto(Integer id, String moneda, Date fechaApertura, Integer estado, Integer tipoCuenta, Integer cliente, List<Integer> saldos, List<Integer> transacciones) {
-        this.id = id;
-        this.moneda = moneda;
-        this.fechaApertura = fechaApertura;
-        this.estado = estado;
-        this.tipoCuenta = tipoCuenta;
-        this.cliente = cliente;
-        this.saldos = saldos;
-        this.transacciones = transacciones;
-    }
-
-    public CuentaDto(String moneda, Date fechaApertura, Integer estado, Integer tipoCuenta, Integer cliente, List<Integer> saldos, List<Integer> transacciones) {
-        this.moneda = moneda;
-        this.fechaApertura = fechaApertura;
-        this.estado = estado;
-        this.tipoCuenta = tipoCuenta;
-        this.cliente = cliente;
-        this.saldos = saldos;
-    }
-
     /**
      * @return the id
      */

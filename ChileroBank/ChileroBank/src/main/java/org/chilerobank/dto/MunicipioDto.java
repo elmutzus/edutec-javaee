@@ -16,22 +16,6 @@ public class MunicipioDto {
     private String nombre;
     private Integer departamento;
 
-    public MunicipioDto() {
-    }
-
-    public MunicipioDto(Integer id, String codigo, String nombre, Integer departamento) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.departamento = departamento;
-    }
-
-    public MunicipioDto(String codigo, String nombre, Integer departamento) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.departamento = departamento;
-    }
-
     /**
      * @return the id
      */

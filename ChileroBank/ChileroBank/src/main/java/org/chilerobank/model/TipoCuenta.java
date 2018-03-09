@@ -28,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "tipo_cuenta")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "tipoCuenta.findAll", query = "Select DISTINCT d from TipoCuenta d JOIN FETCH d.cuentas")
+    @NamedQuery(name = "tipoCuenta.findAll", query = "SELECT DISTINCT tc FROM TipoCuenta tc")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "tipoCuenta.findById", query = "Select d from TipoCuenta d JOIN FETCH d.cuentas WHERE d.id = :id")
+    @NamedQuery(name = "tipoCuenta.findById", query = "SELECT tc FROM TipoCuenta tc WHERE tc.id = :id")
 })
 public class TipoCuenta {
 
@@ -49,9 +49,6 @@ public class TipoCuenta {
 
     @Column(name = "tasa_interes")
     private Float tasaInteres;
-
-    @OneToMany(mappedBy = "tipoCuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Cuenta> cuentas;
 
     /**
      * @return the id
@@ -108,20 +105,4 @@ public class TipoCuenta {
     public void setTasaInteres(Float tasaInteres) {
         this.tasaInteres = tasaInteres;
     }
-
-    /**
-     * @return the cuentas
-     */
-    @XmlTransient
-    public List<Cuenta> getCuentas() {
-        return cuentas;
-    }
-
-    /**
-     * @param cuentas the cuentas to set
-     */
-    public void setCuentas(List<Cuenta> cuentas) {
-        this.cuentas = cuentas;
-    }
-
 }

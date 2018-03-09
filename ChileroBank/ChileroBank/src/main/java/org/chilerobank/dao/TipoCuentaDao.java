@@ -43,7 +43,6 @@ public class TipoCuentaDao {
     public TipoCuenta edit(TipoCuenta entity) {
         TipoCuenta tc = this.find(entity.getId());
         if (tc != null) {
-            tc.setCuentas(entity.getCuentas());
             tc.setDescripcion(entity.getDescripcion());
             tc.setNombre(entity.getNombre());
             tc.setTasaInteres(entity.getTasaInteres());

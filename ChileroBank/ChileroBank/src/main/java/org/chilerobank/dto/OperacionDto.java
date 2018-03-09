@@ -18,22 +18,6 @@ public class OperacionDto {
     private String descripcion;
     private List<Integer> transacciones;
 
-    public OperacionDto() {
-    }
-
-    public OperacionDto(Integer id, String nombre, String descripcion, List<Integer> transacciones) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.transacciones = transacciones;
-    }
-
-    public OperacionDto(String nombre, String descripcion, List<Integer> transacciones) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.transacciones = transacciones;
-    }
-
     /**
      * @return the id
      */

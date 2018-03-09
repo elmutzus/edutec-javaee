@@ -17,20 +17,6 @@ public class SaldoDto {
     private Integer cuenta;
     private Date fecha;
 
-    public SaldoDto() {
-    }
-
-    public SaldoDto(Integer id, Integer cuenta, Date fecha) {
-        this.id = id;
-        this.cuenta = cuenta;
-        this.fecha = fecha;
-    }
-
-    public SaldoDto(Integer cuenta, Date fecha) {
-        this.cuenta = cuenta;
-        this.fecha = fecha;
-    }
-
     /**
      * @return the id
      */

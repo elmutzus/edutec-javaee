@@ -20,25 +20,6 @@ public class ClienteDto {
     private Date fechaNacimiento;
     private Integer municipio;
 
-    public ClienteDto() {
-    }
-
-    public ClienteDto(Integer id, String nombre, String direccion, String nit, Date fechaNacimiento, Integer municipio) {
-        this.id = id;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.nit = nit;
-        this.fechaNacimiento = fechaNacimiento;
-        this.municipio = municipio;
-    }
-
-    public ClienteDto(String nombre, String direccion, String nit, Date fechaNacimiento, Integer municipio) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.nit = nit;
-        this.fechaNacimiento = fechaNacimiento;
-        this.municipio = municipio;
-    }
 
     /**
      * @return the id

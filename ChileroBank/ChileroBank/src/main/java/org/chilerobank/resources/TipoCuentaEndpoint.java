@@ -81,13 +81,6 @@ public class TipoCuentaEndpoint {
         tp.setNombre(dto.getNombre());
         tp.setTasaInteres(dto.getTasaInteres());
 
-        List<Cuenta> cnts = new ArrayList<>();
-
-        for (Integer id : dto.getCuentas()) {
-            cnts.add(this.cnDao.find(id));
-        }
-
-        tp.setCuentas(cnts);
         this.tpDao.save(tp);
 
         return Response.ok(tp).build();
@@ -101,14 +94,6 @@ public class TipoCuentaEndpoint {
         tp.setDescripcion(dto.getDescripcion());
         tp.setNombre(dto.getNombre());
         tp.setTasaInteres(dto.getTasaInteres());
-
-        List<Cuenta> cnts = new ArrayList<>();
-
-        for (Integer id : dto.getCuentas()) {
-            cnts.add(this.cnDao.find(id));
-        }
-
-        tp.setCuentas(cnts);
 
         TipoCuenta updatedSl = this.tpDao.edit(tp);
         if (updatedSl == null) {

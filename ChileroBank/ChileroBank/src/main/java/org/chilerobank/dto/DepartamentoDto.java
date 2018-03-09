@@ -18,22 +18,6 @@ public class DepartamentoDto {
     private String nombre;
     private List<Integer> municipios;
 
-    public DepartamentoDto() {
-    }
-
-    public DepartamentoDto(Integer id, String codigo, String nombre, List<Integer> municipios) {
-        this.id = id;
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.municipios = municipios;
-    }
-
-    public DepartamentoDto(String codigo, String nombre, List<Integer> municipios) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.municipios = municipios;
-    }
-
     /**
      * @return the id
      */

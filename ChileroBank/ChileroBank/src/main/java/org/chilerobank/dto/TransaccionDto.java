@@ -18,24 +18,6 @@ public class TransaccionDto {
     private Integer cuenta;
     private Integer operacion;
 
-    public TransaccionDto() {
-    }
-
-    public TransaccionDto(Integer id, Date fechaMovimiento, Float monto, Integer cuenta, Integer operacion) {
-        this.id = id;
-        this.fechaMovimiento = fechaMovimiento;
-        this.monto = monto;
-        this.cuenta = cuenta;
-        this.operacion = operacion;
-    }
-    
-    public TransaccionDto(Date fechaMovimiento, Float monto, Integer cuenta, Integer operacion) {
-        this.fechaMovimiento = fechaMovimiento;
-        this.monto = monto;
-        this.cuenta = cuenta;
-        this.operacion = operacion;
-    }
-
     /**
      * @return the id
      */

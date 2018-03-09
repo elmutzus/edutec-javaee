@@ -22,30 +22,6 @@ public class UsuarioDto {
     private String password;
     private String telefono;
 
-    public UsuarioDto() {
-    }
-
-    public UsuarioDto(Integer id, Integer rol, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono) {
-        this.id = id;
-        this.rol = rol;
-        this.codigo = codigo;
-        this.email = email;
-        this.fechaNacimiento = fechaNacimiento;
-        this.nombre = nombre;
-        this.password = password;
-        this.telefono = telefono;
-    }
-
-    public UsuarioDto(Integer rol, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono) {
-        this.rol = rol;
-        this.codigo = codigo;
-        this.email = email;
-        this.fechaNacimiento = fechaNacimiento;
-        this.nombre = nombre;
-        this.password = password;
-        this.telefono = telefono;
-    }
-
     /**
      * @return the id
      */
