@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.chilerobank.model.Rol;
+import org.chilerobank.model.Rol;
 
 /**
  *
@@ -35,5 +36,28 @@ public class RolDao {
         } catch (NoResultException nre) {
             return null;
         }
+    }
+    
+    public Rol save(Rol entity) {
+        this.em.persist(entity);
+        return entity;
+    }
+
+    public Rol edit(Rol entity) {
+        Rol sl = this.find(entity.getId());
+        if (sl != null) {
+            sl.setDescripcion(entity.getDescripcion());
+            sl.setNombre(entity.getNombre());
+            sl.setUsuarios(entity.getUsuarios());
+            
+            this.em.merge(sl);
+        }
+        return sl;
+    }
+
+    public Rol remove(Integer id) {
+        Rol sl = this.find(id);
+        this.em.remove(sl);
+        return sl;
     }
 }

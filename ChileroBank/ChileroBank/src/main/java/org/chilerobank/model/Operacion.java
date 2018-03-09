@@ -50,22 +50,6 @@ public class Operacion {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "operacion", fetch = FetchType.LAZY)
     private List<Transaccion> transacciones;
 
-    public Operacion() {
-    }
-
-    public Operacion(Integer id, String nombre, String descripcion, List<Transaccion> transacciones) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.transacciones = transacciones;
-    }
-
-    public Operacion(String nombre, String descripcion, List<Transaccion> transacciones) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.transacciones = transacciones;
-    }
-
     /**
      * @return the id
      */

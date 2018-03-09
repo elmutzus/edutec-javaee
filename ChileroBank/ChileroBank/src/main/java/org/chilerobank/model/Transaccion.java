@@ -50,11 +50,11 @@ public class Transaccion {
     @Column(name = "monto")
     private Float monto;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cuenta")
     private Cuenta cuenta;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "operacion")
     private Operacion operacion;
 

@@ -50,26 +50,8 @@ public class TipoCuenta {
     @Column(name = "tasa_interes")
     private Float tasaInteres;
 
-    @OneToMany(mappedBy = "tipoCuenta")
+    @OneToMany(mappedBy = "tipoCuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Cuenta> cuentas;
-
-    public TipoCuenta() {
-    }
-
-    public TipoCuenta(Integer id, String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
-    }
-
-    public TipoCuenta(String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
-    }
 
     /**
      * @return the id

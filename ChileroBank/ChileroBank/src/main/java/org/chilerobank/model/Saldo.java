@@ -44,7 +44,7 @@ public class Saldo {
     private Integer id;
 
     @JoinColumn(name = "cuenta")
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cuenta cuenta;
 
     @Temporal(TemporalType.DATE)

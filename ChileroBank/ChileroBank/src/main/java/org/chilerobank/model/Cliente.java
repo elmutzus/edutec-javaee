@@ -7,8 +7,10 @@ package org.chilerobank.model;
 
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,11 +57,11 @@ public class Cliente {
     @Column(name = "fecha_nacimiento")
     private Date fechaNacimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "Municipio")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "municipio")
     private Municipio municipio;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Cuenta> cuentas;
 
     /**

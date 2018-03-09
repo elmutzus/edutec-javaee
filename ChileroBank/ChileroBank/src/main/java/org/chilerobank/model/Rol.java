@@ -42,15 +42,6 @@ public class Rol implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rol", fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
 
-    public Rol() {
-    }
-
-    public Rol(Integer id, String nombre, String descripcion) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-    }
-
     /**
      * @return the id
      */
