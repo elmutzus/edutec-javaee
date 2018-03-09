@@ -49,7 +49,7 @@ public class Departamento implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "departamento", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "departamentoId", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     List<Municipio> municipios;
 
     public Departamento() {
@@ -85,7 +85,6 @@ public class Departamento implements Serializable {
         this.codigo = codigo;
     }
 
-    @XmlTransient
     public List<Municipio> getMunicipios() {
         return municipios;
     }

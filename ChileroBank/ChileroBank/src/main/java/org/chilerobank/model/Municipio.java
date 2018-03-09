@@ -6,8 +6,6 @@
 package org.chilerobank.model;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
@@ -31,10 +28,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento")
+    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamentoId")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento WHERE mn.id = :id")
+    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamentoId WHERE mn.id = :id")
 })
 public class Municipio implements Serializable {
 
@@ -50,9 +47,9 @@ public class Municipio implements Serializable {
     @Column(name = "nombre")
     private String nombre;
 
-    @JoinColumn(name = "departamento", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Departamento departamento;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "departamento_id")
+    private Departamento departamentoId;
 
     public Integer getId() {
         return id;
@@ -79,11 +76,11 @@ public class Municipio implements Serializable {
     }
 
     @XmlTransient
-    public Departamento getDepartamento() {
-        return departamento;
+    public Departamento getDepartamentoId() {
+        return departamentoId;
     }
 
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
+    public void setDepartamentoId(Departamento departamento) {
+        this.departamentoId = departamento;
     }
 }

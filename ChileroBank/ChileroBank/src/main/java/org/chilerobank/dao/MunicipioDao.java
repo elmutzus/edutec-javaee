@@ -44,7 +44,7 @@ public class MunicipioDao {
         Municipio mn = this.find(entity.getId());
         if (mn != null) {
             mn.setCodigo(entity.getCodigo());
-            mn.setDepartamento(mn.getDepartamento());
+            mn.setDepartamentoId(mn.getDepartamentoId());
             mn.setNombre(entity.getNombre());
             this.em.merge(mn);
         }

@@ -76,7 +76,7 @@ public class MunicipioEndpoint {
         Municipio mn = new Municipio();
 
         mn.setCodigo(dto.getCodigo());
-        mn.setDepartamento(this.dptDao.find(dto.getDepartamento()));
+        mn.setDepartamentoId(this.dptDao.find(dto.getDepartamento()));
         mn.setNombre(dto.getNombre());
 
         this.mnDao.save(mn);
@@ -89,7 +89,7 @@ public class MunicipioEndpoint {
         Municipio mn = new Municipio();
 
         mn.setCodigo(dto.getCodigo());
-        mn.setDepartamento(this.dptDao.find(dto.getDepartamento()));
+        mn.setDepartamentoId(this.dptDao.find(dto.getDepartamento()));
         mn.setNombre(dto.getNombre());
 
         Municipio updatedMn = this.mnDao.edit(mn);

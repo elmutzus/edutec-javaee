@@ -5,7 +5,6 @@
  */
 package org.chilerobank.resources;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -47,18 +46,6 @@ public class DepartamentoEndpoint {
     @GET
     @Produces({"application/json"})
     public List<Departamento> findAll() {
-        List<Departamento> deptosDto;
-        deptosDto = new ArrayList<>();
-
-        this.dao.findAll()
-                .stream()
-                .forEach((departamento) -> deptosDto.add(
-                new Departamento(
-                        departamento.getId(),
-                        departamento.getCodigo(),
-                        departamento.getNombre()
-                )
-        ));
-        return deptosDto;
+        return this.dao.findAll();
     }
 }
