@@ -31,10 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "municipio")
 @NamedQueries({
     // Distinct
-    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes")
+    @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento")
     ,
     //JOIN FETCH
-    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento LEFT JOIN FETCH mn.clientes WHERE mn.id = :id")
+    @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento WHERE mn.id = :id")
 })
 public class Municipio implements Serializable {
 
@@ -53,12 +53,6 @@ public class Municipio implements Serializable {
     @JoinColumn(name = "departamento", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Departamento departamento;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "municipio", fetch = FetchType.LAZY)
-    List<Cliente> clientes;
-
-    public Municipio() {
-    }
 
     public Integer getId() {
         return id;
@@ -91,14 +85,5 @@ public class Municipio implements Serializable {
 
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
-    }
-
-    @XmlTransient
-    public List<Cliente> getClientes() {
-        return this.clientes;
-    }
-
-    public void setClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
     }
 }
