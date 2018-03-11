@@ -19,17 +19,6 @@ public class TipoCuentaDto {
     private Float tasaInteres;
     private List<Integer> cuentas;
 
-    public TipoCuentaDto() {
-    }
-
-    public TipoCuentaDto(Integer id, String nombre, String descripcion, Float tasaInteres, List<Integer> cuentas) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
-    }
-
     /**
      * @return the id
      */

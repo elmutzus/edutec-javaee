@@ -15,15 +15,6 @@ public class ParametroSistemaDto {
     private String nombre;
     private String valor;
 
-    public ParametroSistemaDto() {
-    }
-
-    public ParametroSistemaDto(Integer id, String nombre, String valor) {
-        this.id = id;
-        this.nombre = nombre;
-        this.valor = valor;
-    }
-
     public Integer getId() {
         return id;
     }
