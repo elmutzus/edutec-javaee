@@ -27,9 +27,11 @@ import org.chilerobank.dao.TipoCuentaDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.CuentaDto;
 import org.chilerobank.dto.ErrorMessageDto;
+import org.chilerobank.model.Cliente;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
 import org.chilerobank.model.Saldo;
+import org.chilerobank.model.TipoCuenta;
 import org.chilerobank.model.Transaccion;
 
 /**
@@ -79,7 +81,8 @@ public class CuentaEndpoint {
                     new Saldo(
                             curSl.getId(),
                             null,
-                            curSl.getFecha()
+                            curSl.getFecha(),
+                            curSl.getMonto()
                     )
             ));
         }
@@ -98,25 +101,42 @@ public class CuentaEndpoint {
                                         curTrx.getFechaMovimiento(),
                                         curTrx.getMonto(),
                                         null,
-                                        new Operacion(
-                                                op.getId(),
-                                                op.getNombre(),
-                                                op.getDescripcion(),
-                                                null
-                                        )
+                                        null
                                 )
                         );
                     }
                     );
         }
 
+        TipoCuenta currentTp = current.getTipoCuenta();
+
+        TipoCuenta actualTp = new TipoCuenta(
+                currentTp.getId(),
+                currentTp.getNombre(),
+                currentTp.getDescripcion(),
+                currentTp.getTasaInteres(),
+                null
+        );
+
+        Cliente currentCl = current.getCliente();
+
+        Cliente actualCl = new Cliente(
+                currentCl.getId(),
+                currentCl.getNombre(),
+                currentCl.getDireccion(),
+                currentCl.getNit(),
+                currentCl.getFechaNacimiento(),
+                currentCl.getMunicipio(),
+                null
+        );
+
         return new Cuenta(
                 current.getId(),
                 current.getMoneda(),
                 current.getFechaApertura(),
                 current.getEstado(),
-                current.getTipoCuenta(),
-                current.getCliente(),
+                actualTp,
+                actualCl,
                 actualSls,
                 actualTrxs
         );

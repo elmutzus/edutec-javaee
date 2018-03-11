@@ -58,7 +58,8 @@ public class SaldoEndpoint {
         return new Saldo(
                 current.getId(),
                 current.getCuenta(),
-                current.getFecha()
+                current.getFecha(),
+                current.getMonto()
         );
     }
 
@@ -72,7 +73,8 @@ public class SaldoEndpoint {
         return new Saldo(
                 dto.getId(),
                 this.cnDao.find(dto.getCuenta()),
-                dto.getFecha()
+                dto.getFecha(),
+                dto.getMonto()
         );
     }
 

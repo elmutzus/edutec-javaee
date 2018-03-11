@@ -16,7 +16,7 @@ public class SaldoDto {
     private Integer id;
     private Integer cuenta;
     private Date fecha;
-
+    private float monto;
     /**
      * @return the id
      */
@@ -57,6 +57,20 @@ public class SaldoDto {
      */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the monto
+     */
+    public float getMonto() {
+        return monto;
+    }
+
+    /**
+     * @param monto the monto to set
+     */
+    public void setMonto(float monto) {
+        this.monto = monto;
     }
 
 }

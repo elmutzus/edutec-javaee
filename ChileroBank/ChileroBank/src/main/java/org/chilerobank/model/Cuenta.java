@@ -30,11 +30,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "cuenta")
 @NamedQueries({
-    // Distinct
-    @NamedQuery(name = "cuenta.findAll", query = "SELECT DISTINCT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente")
+    @NamedQuery(name = "cuenta.findAll", query = "SELECT DISTINCT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.saldos sl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones")
     ,
-    //JOIN FETCH
-    @NamedQuery(name = "cuenta.findById", query = "SELECT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente WHERE cn.id = :id")
+    @NamedQuery(name = "cuenta.findById", query = "SELECT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.saldos sl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones WHERE cn.id = :id")
 })
 public class Cuenta {
 

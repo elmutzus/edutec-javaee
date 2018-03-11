@@ -47,14 +47,18 @@ public class Saldo {
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
     private Date fecha;
+    
+    @Column(name = "monto")
+    private float monto;
 
     public Saldo() {
     }
 
-    public Saldo(Integer id, Cuenta cuenta, Date fecha) {
+    public Saldo(Integer id, Cuenta cuenta, Date fecha, float monto) {
         this.id = id;
         this.cuenta = cuenta;
         this.fecha = fecha;
+        this.monto = monto;
     }
 
     /**
@@ -97,6 +101,20 @@ public class Saldo {
      */
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    /**
+     * @return the monto
+     */
+    public float getMonto() {
+        return monto;
+    }
+
+    /**
+     * @param monto the monto to set
+     */
+    public void setMonto(float monto) {
+        this.monto = monto;
     }
 
 }
