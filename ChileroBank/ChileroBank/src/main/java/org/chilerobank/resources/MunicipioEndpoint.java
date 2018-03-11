@@ -26,6 +26,7 @@ import org.chilerobank.dao.MunicipioDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.MunicipioDto;
 import org.chilerobank.model.Cliente;
+import org.chilerobank.model.Departamento;
 import org.chilerobank.model.Municipio;
 
 /**
@@ -71,15 +72,24 @@ public class MunicipioEndpoint {
                         currentCl.getDireccion(),
                         currentCl.getNit(),
                         currentCl.getFechaNacimiento(),
-                        currentCl.getMunicipio(),
+                        null,
                         null))
                 );
+        
+        Departamento currentDp = current.getDepartamento();
+        
+        Departamento actualDp = new Departamento(
+                currentDp.getId(),
+                currentDp.getCodigo(),
+                currentDp.getNombre(),
+                null
+        );
 
         return new Municipio(
                 current.getId(),
                 current.getCodigo(),
                 current.getNombre(),
-                current.getDepartamento(),
+                actualDp,
                 actualLst
         );
     }
