@@ -73,7 +73,7 @@ public class DepartamentoEndpoint {
                         currentMun.getId(),
                         currentMun.getCodigo(),
                         currentMun.getNombre(),
-                        currentDep,
+                        null,
                         null)
         ));
 
