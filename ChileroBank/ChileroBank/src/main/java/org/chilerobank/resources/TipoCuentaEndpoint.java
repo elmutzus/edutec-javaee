@@ -5,6 +5,7 @@
  */
 package org.chilerobank.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,9 +20,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.TipoCuentaDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TipoCuentaDto;
+import org.chilerobank.model.Cliente;
+import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.TipoCuenta;
 
 /**
@@ -33,20 +37,90 @@ import org.chilerobank.model.TipoCuenta;
 public class TipoCuentaEndpoint {
 
     final TipoCuentaDao tpDao;
+    final CuentaDao ctDao;
 
     public TipoCuentaEndpoint() {
         this.tpDao = null;
+        this.ctDao = null;
     }
 
     @Inject
-    public TipoCuentaEndpoint(TipoCuentaDao tpDao) {
+    public TipoCuentaEndpoint(TipoCuentaDao tpDao, CuentaDao ctDao) {
         this.tpDao = tpDao;
+        this.ctDao = ctDao;
+    }
+
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public TipoCuenta createResponseObject(TipoCuenta current) {
+        List<Cuenta> actualLst = new ArrayList<>();
+
+        current.getCuentas()
+                .stream()
+                .forEach((cur) -> actualLst.add(
+                new Cuenta(
+                        cur.getId(),
+                        cur.getMoneda(),
+                        cur.getFechaApertura(),
+                        cur.getEstado(),
+                        null,
+                        null,
+                        null,
+                        null
+                ))
+                );
+
+        return new TipoCuenta(
+                current.getId(),
+                current.getNombre(),
+                current.getDescripcion(),
+                current.getTasaInteres(),
+                actualLst
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public TipoCuenta createFromDto(TipoCuentaDto dto) {
+        List<Cuenta> actualLst = new ArrayList<>();
+
+        if (dto.getCuentas() != null && dto.getCuentas().size() > 0) {
+            dto.getCuentas()
+                    .stream()
+                    .forEach((id)
+                            -> actualLst.add(this.ctDao.find(id))
+                    );
+        }
+
+        return new TipoCuenta(
+                dto.getId(),
+                dto.getNombre(),
+                dto.getDescripcion(),
+                dto.getTasaInteres(),
+                actualLst
+        );
     }
 
     @GET
     @Produces({"application/json"})
     public List<TipoCuenta> findAll() {
-        return this.tpDao.findAll();
+        List<TipoCuenta> actualLst = new ArrayList<>();
+
+        this.tpDao.findAll()
+                .stream()
+                .forEach((curObj)
+                        -> actualLst.add(createResponseObject(curObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -69,11 +143,18 @@ public class TipoCuentaEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(TipoCuentaDto dto) {
-        TipoCuenta tp = new TipoCuenta();
+        String name = dto.getNombre();
 
-        tp.setDescripcion(dto.getDescripcion());
-        tp.setNombre(dto.getNombre());
-        tp.setTasaInteres(dto.getTasaInteres());
+        TipoCuenta existent = this.tpDao.find(name);
+
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .build();
+        }
+
+        TipoCuenta tp = createFromDto(dto);
 
         this.tpDao.save(tp);
 
@@ -83,21 +164,17 @@ public class TipoCuentaEndpoint {
     @PUT
     @Produces({"application/json"})
     public Response update(TipoCuentaDto dto) throws RollbackException {
-        TipoCuenta tp = new TipoCuenta();
+        TipoCuenta tp = createFromDto(dto);
 
-        tp.setDescripcion(dto.getDescripcion());
-        tp.setNombre(dto.getNombre());
-        tp.setTasaInteres(dto.getTasaInteres());
-
-        TipoCuenta updatedSl = this.tpDao.edit(tp);
-        if (updatedSl == null) {
+        TipoCuenta updatedTp = this.tpDao.edit(tp);
+        if (updatedTp == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(updatedSl).build();
+        return Response.ok(createResponseObject(updatedTp)).build();
     }
 
     @DELETE
@@ -113,6 +190,6 @@ public class TipoCuentaEndpoint {
                     .build();
         }
 
-        return Response.ok(tp).build();
+        return Response.ok(createResponseObject(tp)).build();
     }
 }

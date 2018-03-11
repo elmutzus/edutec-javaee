@@ -157,7 +157,7 @@ public class DepartamentoEndpoint {
 
         Departamento actualDep = createFromDto(dto);
         this.dpDao.save(actualDep);
-        return Response.ok(actualDep).build();
+        return Response.ok(createDepartmentObject(actualDep)).build();
     }
 
     @PUT
@@ -173,22 +173,22 @@ public class DepartamentoEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedDep).build();
+        return Response.ok(createDepartmentObject(updatedDep)).build();
     }
 
     @DELETE
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Departamento mn = this.dpDao.remove(id);
+        Departamento dep = this.dpDao.remove(id);
 
-        if (mn == null) {
+        if (dep == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(mn).build();
+        return Response.ok(createDepartmentObject(dep)).build();
     }
 }

@@ -164,7 +164,7 @@ public class ClienteEndpoint {
         Cliente cl = createFromDto(dto);
 
         this.clDao.save(cl);
-        return Response.ok(cl).build();
+        return Response.ok(createResponseObject(cl)).build();
     }
 
     @PUT
@@ -180,7 +180,7 @@ public class ClienteEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedCl).build();
+        return Response.ok(createResponseObject(updatedCl)).build();
     }
 
     @DELETE
@@ -196,6 +196,6 @@ public class ClienteEndpoint {
                     .build();
         }
 
-        return Response.ok(cl).build();
+        return Response.ok(createResponseObject(cl)).build();
     }
 }

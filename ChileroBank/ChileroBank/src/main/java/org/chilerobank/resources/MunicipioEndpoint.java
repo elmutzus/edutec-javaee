@@ -149,9 +149,9 @@ public class MunicipioEndpoint {
         }
 
         Municipio mn = createFromDto(dto);
-        
+
         this.mnDao.save(mn);
-        return Response.ok(mn).build();
+        return Response.ok(createResponseObject(mn)).build();
     }
 
     @PUT
@@ -167,7 +167,7 @@ public class MunicipioEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedMn).build();
+        return Response.ok(createResponseObject(updatedMn)).build();
     }
 
     @DELETE
@@ -183,6 +183,6 @@ public class MunicipioEndpoint {
                     .build();
         }
 
-        return Response.ok(mn).build();
+        return Response.ok(createResponseObject(mn)).build();
     }
 }

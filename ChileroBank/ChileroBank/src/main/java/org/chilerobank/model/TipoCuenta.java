@@ -5,13 +5,17 @@
  */
 package org.chilerobank.model;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -21,11 +25,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tipo_cuenta")
 @NamedQueries({
-    // Distinct
     @NamedQuery(name = "tipoCuenta.findAll", query = "SELECT DISTINCT tc FROM TipoCuenta tc")
     ,
-    //JOIN FETCH
     @NamedQuery(name = "tipoCuenta.findById", query = "SELECT tc FROM TipoCuenta tc WHERE tc.id = :id")
+    ,
+    @NamedQuery(name = "tipoCuenta.findByName", query = "SELECT tc FROM TipoCuenta tc WHERE tc.nombre = :name")
 })
 public class TipoCuenta {
 
@@ -43,20 +47,25 @@ public class TipoCuenta {
     @Column(name = "tasa_interes")
     private Float tasaInteres;
 
+    @OneToMany(mappedBy = "tipoCuenta", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Cuenta> cuentas;
+
     public TipoCuenta() {
     }
 
-    public TipoCuenta(Integer id, String nombre, String descripcion, Float tasaInteres) {
+    public TipoCuenta(Integer id, String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tasaInteres = tasaInteres;
+        this.cuentas = cuentas;
     }
 
-    public TipoCuenta(String nombre, String descripcion, Float tasaInteres) {
+    public TipoCuenta(String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tasaInteres = tasaInteres;
+        this.cuentas = cuentas;
     }
 
     /**
@@ -113,5 +122,19 @@ public class TipoCuenta {
      */
     public void setTasaInteres(Float tasaInteres) {
         this.tasaInteres = tasaInteres;
+    }
+
+    /**
+     * @return the cuentas
+     */
+    public List<Cuenta> getCuentas() {
+        return cuentas;
+    }
+
+    /**
+     * @param cuentas the cuentas to set
+     */
+    public void setCuentas(List<Cuenta> cuentas) {
+        this.cuentas = cuentas;
     }
 }

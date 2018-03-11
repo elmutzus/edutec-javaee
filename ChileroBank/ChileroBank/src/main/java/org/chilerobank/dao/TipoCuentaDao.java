@@ -30,6 +30,17 @@ public class TipoCuentaDao {
             return null;
         }
     }
+    
+    public TipoCuenta find(String name) {
+        try {
+            return this.em
+                    .createNamedQuery("tipoCuenta.findByName", TipoCuenta.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 
     public List<TipoCuenta> findAll() {
         return this.em.createNamedQuery("tipoCuenta.findAll").getResultList();
