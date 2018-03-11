@@ -20,7 +20,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -90,7 +89,6 @@ public class Municipio implements Serializable {
         this.codigo = codigo;
     }
 
-    @XmlTransient
     public Departamento getDepartamento() {
         return departamento;
     }

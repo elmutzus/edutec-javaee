@@ -22,7 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -141,7 +140,6 @@ public class Cuenta {
     /**
      * @return the tipoCuenta
      */
-    @XmlTransient
     public TipoCuenta getTipoCuenta() {
         return tipoCuenta;
     }
@@ -156,7 +154,6 @@ public class Cuenta {
     /**
      * @return the cliente
      */
-    @XmlTransient
     public Cliente getCliente() {
         return cliente;
     }
@@ -171,7 +168,6 @@ public class Cuenta {
     /**
      * @return the saldo
      */
-    @XmlTransient
     public List<Saldo> getSaldos() {
         return saldos;
     }
@@ -186,7 +182,6 @@ public class Cuenta {
     /**
      * @return the transaccion
      */
-    @XmlTransient
     public List<Transaccion> getTransacciones() {
         return transacciones;
     }

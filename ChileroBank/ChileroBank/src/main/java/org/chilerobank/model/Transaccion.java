@@ -19,7 +19,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -110,7 +109,6 @@ public class Transaccion {
     /**
      * @return the cuenta
      */
-    @XmlTransient
     public Cuenta getCuenta() {
         return cuenta;
     }
@@ -125,7 +123,6 @@ public class Transaccion {
     /**
      * @return the operacion
      */
-    @XmlTransient
     public Operacion getOperacion() {
         return operacion;
     }

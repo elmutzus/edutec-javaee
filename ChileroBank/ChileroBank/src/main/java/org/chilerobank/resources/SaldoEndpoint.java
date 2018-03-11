@@ -5,6 +5,7 @@
  */
 package org.chilerobank.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -47,10 +48,46 @@ public class SaldoEndpoint {
         this.cnDao = cnDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Saldo createResponseObject(Saldo current) {
+        return new Saldo(
+                current.getId(),
+                current.getCuenta(),
+                current.getFecha()
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Saldo createFromDto(SaldoDto dto) {
+        return new Saldo(
+                dto.getId(),
+                this.cnDao.find(dto.getCuenta()),
+                dto.getFecha()
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Saldo> findAll() {
-        return this.slDao.findAll();
+        List<Saldo> actualLst = new ArrayList<>();
+
+        this.slDao.findAll()
+                .stream()
+                .forEach((currentObj)
+                        -> actualLst.add(createResponseObject(currentObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -66,29 +103,23 @@ public class SaldoEndpoint {
                     .build();
         }
 
-        return Response.ok(sl, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(sl), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(SaldoDto dto) {
-        Saldo sl = new Saldo();
-
-        sl.setCuenta(this.cnDao.find(dto.getCuenta()));
-        sl.setFecha(dto.getFecha());
+        Saldo sl = createFromDto(dto);
 
         this.slDao.save(sl);
-        return Response.ok(sl).build();
+        return Response.ok(createResponseObject(sl)).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(SaldoDto dto) throws RollbackException {
-        Saldo sl = new Saldo();
-
-        sl.setCuenta(this.cnDao.find(dto.getCuenta()));
-        sl.setFecha(dto.getFecha());
+        Saldo sl = createFromDto(dto);
 
         Saldo updatedSl = this.slDao.edit(sl);
         if (updatedSl == null) {
@@ -98,7 +129,7 @@ public class SaldoEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedSl).build();
+        return Response.ok(createResponseObject(updatedSl)).build();
     }
 
     @DELETE
@@ -114,7 +145,7 @@ public class SaldoEndpoint {
                     .build();
         }
 
-        return Response.ok(mn).build();
+        return Response.ok(createResponseObject(mn)).build();
     }
 
 }
