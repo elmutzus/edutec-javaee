@@ -58,12 +58,6 @@ public class Departamento implements Serializable {
         this.municipios = mns;
     }
 
-    public Departamento(String codigo, String nombre, List<Municipio> mns) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.municipios = mns;
-    }
-
     public Integer getId() {
         return id;
     }

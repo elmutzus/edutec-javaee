@@ -61,13 +61,6 @@ public class TipoCuenta {
         this.cuentas = cuentas;
     }
 
-    public TipoCuenta(String nombre, String descripcion, Float tasaInteres, List<Cuenta> cuentas) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.tasaInteres = tasaInteres;
-        this.cuentas = cuentas;
-    }
-
     /**
      * @return the id
      */

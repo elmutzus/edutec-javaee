@@ -76,15 +76,6 @@ public class Cliente {
         this.cuentas = cuentas;
     }
 
-    public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, List<Cuenta> cuentas) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.nit = nit;
-        this.fechaNacimiento = fechaNacimiento;
-        this.municipio = municipio;
-        this.cuentas = cuentas;
-    }
-
     /**
      * @return the id
      */
