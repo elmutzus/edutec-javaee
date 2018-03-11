@@ -38,6 +38,17 @@ public class UsuarioDao {
         }
     }
 
+    public Usuario find(String code) {
+        try {
+            return this.em
+                    .createNamedQuery("usuario.findByCode", Usuario.class)
+                    .setParameter("code", code)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public List<Usuario> findAll() {
         return this.em.createNamedQuery("usuario.findAll").getResultList();
     }

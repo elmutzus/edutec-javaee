@@ -14,7 +14,7 @@ import java.util.Date;
 public class UsuarioDto {
 
     private Integer id;
-    private Integer rolId;
+    private Integer rol;
     private String codigo;
     private String email;
     private Date fechaNacimiento;
@@ -37,17 +37,17 @@ public class UsuarioDto {
     }
 
     /**
-     * @return the rolId
+     * @return the rol
      */
-    public Integer getRolId() {
-        return rolId;
+    public Integer getRol() {
+        return rol;
     }
 
     /**
-     * @param rol the rolId to set
+     * @param rol the rol to set
      */
-    public void setRolId(Integer rol) {
-        this.rolId = rol;
+    public void setRol(Integer rol) {
+        this.rol = rol;
     }
 
     /**

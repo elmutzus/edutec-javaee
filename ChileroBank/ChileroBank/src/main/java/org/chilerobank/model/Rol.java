@@ -104,7 +104,6 @@ public class Rol implements Serializable {
     /**
      * @return the usuarios
      */
-    @XmlTransient
     public List<Usuario> getUsuarios() {
         return usuarios;
     }

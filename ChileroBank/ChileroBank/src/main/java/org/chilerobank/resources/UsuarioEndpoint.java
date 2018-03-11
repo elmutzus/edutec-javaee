@@ -5,6 +5,7 @@
  */
 package org.chilerobank.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -23,6 +24,7 @@ import org.chilerobank.dao.RolDao;
 import org.chilerobank.dao.UsuarioDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.UsuarioDto;
+import org.chilerobank.model.Rol;
 import org.chilerobank.model.Usuario;
 
 /**
@@ -50,10 +52,64 @@ public class UsuarioEndpoint {
         this.rolDao = rolDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Usuario createResponseObject(Usuario current) {
+        Rol rl = current.getRol();
+
+        return new Usuario(
+                current.getId(),
+                current.getCodigo(),
+                current.getEmail(),
+                current.getFechaNacimiento(),
+                current.getNombre(),
+                current.getPassword(),
+                current.getTelefono(),
+                new Rol(
+                        rl.getId(),
+                        rl.getNombre(),
+                        rl.getDescripcion(),
+                        null
+                )
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Usuario createFromDto(UsuarioDto dto) {
+
+        return new Usuario(
+                dto.getId(),
+                dto.getCodigo(),
+                dto.getEmail(),
+                dto.getFechaNacimiento(),
+                dto.getNombre(),
+                dto.getPassword(),
+                dto.getTelefono(),
+                this.rolDao.find(dto.getRol())
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Usuario> findAll() {
-        return this.usuarioDao.findAll();
+        List<Usuario> actualLst = new ArrayList<>();
+
+        this.usuarioDao.findAll()
+                .stream()
+                .forEach((currentObj)
+                        -> actualLst.add(createResponseObject(currentObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -69,40 +125,34 @@ public class UsuarioEndpoint {
                     .build();
         }
 
-        return Response.ok(usuario, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(usuario), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
-    @Path("/")
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(UsuarioDto dto) {
-        Usuario usr = new Usuario();
+        String code = dto.getCodigo();
 
-        usr.setCodigo(dto.getCodigo());
-        usr.setEmail(dto.getEmail());
-        usr.setFechaNacimiento(dto.getFechaNacimiento());
-        usr.setNombre(dto.getNombre());
-        usr.setPassword(dto.getPassword());
-        usr.setTelefono(dto.getTelefono());
-        usr.setRol(this.rolDao.find(dto.getRolId()));
+        Usuario existent = this.usuarioDao.find(code);
+
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .build();
+        }
+
+        Usuario usr = createFromDto(dto);
 
         this.usuarioDao.save(usr);
-        return Response.ok(usr).build();
+        return Response.ok(createResponseObject(usr)).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(UsuarioDto dto) throws RollbackException {
-        Usuario usr = new Usuario();
-
-        usr.setCodigo(dto.getCodigo());
-        usr.setEmail(dto.getEmail());
-        usr.setFechaNacimiento(dto.getFechaNacimiento());
-        usr.setNombre(dto.getNombre());
-        usr.setPassword(dto.getPassword());
-        usr.setTelefono(dto.getTelefono());
-        usr.setRol(this.rolDao.find(dto.getRolId()));
+        Usuario usr = createFromDto(dto);
 
         Usuario updatedUsr = this.usuarioDao.edit(usr);
         if (updatedUsr == null) {
@@ -112,7 +162,7 @@ public class UsuarioEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedUsr).build();
+        return Response.ok(createResponseObject(updatedUsr)).build();
     }
 
     @DELETE
@@ -128,7 +178,7 @@ public class UsuarioEndpoint {
                     .build();
         }
 
-        return Response.ok(usr).build();
+        return Response.ok(createResponseObject(usr)).build();
     }
 
 }

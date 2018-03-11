@@ -65,7 +65,14 @@ public class MunicipioEndpoint {
         current.getClientes()
                 .stream()
                 .forEach((currentCl) -> actualLst.add(
-                new Cliente(currentCl.getId(), currentCl.getNombre(), currentCl.getDireccion(), currentCl.getNit(), currentCl.getFechaNacimiento(), currentCl.getMunicipio(), null))
+                new Cliente(
+                        currentCl.getId(),
+                        currentCl.getNombre(),
+                        currentCl.getDireccion(),
+                        currentCl.getNit(),
+                        currentCl.getFechaNacimiento(),
+                        currentCl.getMunicipio(),
+                        null))
                 );
 
         return new Municipio(

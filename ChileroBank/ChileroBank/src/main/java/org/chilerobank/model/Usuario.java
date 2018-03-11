@@ -31,6 +31,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "usuario.findAll", query = "SELECT usr FROM Usuario usr JOIN FETCH usr.rol")
     ,
     @NamedQuery(name = "usuario.findById", query = "SELECT usr FROM Usuario usr JOIN FETCH usr.rol WHERE usr.id = :id")
+        ,
+    @NamedQuery(name = "usuario.findByCode", query = "SELECT usr FROM Usuario usr JOIN FETCH usr.rol WHERE usr.codigo = :code")
 })
 public class Usuario implements Serializable {
 
