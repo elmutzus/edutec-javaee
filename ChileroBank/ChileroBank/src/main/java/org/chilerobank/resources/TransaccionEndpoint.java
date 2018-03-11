@@ -5,6 +5,7 @@
  */
 package org.chilerobank.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import org.chilerobank.dao.OperacionDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TransaccionDto;
+import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Transaccion;
 
 /**
@@ -51,10 +53,61 @@ public class TransaccionEndpoint {
         this.opDao = opDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Transaccion createResponseObject(Transaccion current) {
+        Cuenta curCuenta = current.getCuenta();
+
+        return new Transaccion(
+                current.getId(),
+                current.getFechaMovimiento(),
+                current.getMonto(),
+                new Cuenta(
+                        curCuenta.getId(),
+                        curCuenta.getMoneda(),
+                        curCuenta.getFechaApertura(),
+                        curCuenta.getEstado(),
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                current.getOperacion()
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Transaccion createFromDto(TransaccionDto dto) {
+        return new Transaccion(
+                dto.getId(),
+                dto.getFechaMovimiento(),
+                dto.getMonto(),
+                this.cnDao.find(dto.getCuenta()),
+                this.opDao.find(dto.getOperacion())
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Transaccion> findAll() {
-        return this.trDao.findAll();
+        List<Transaccion> actualLst = new ArrayList<>();
+
+        this.trDao.findAll()
+                .stream()
+                .forEach((currentObj)
+                        -> actualLst.add(createResponseObject(currentObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -70,35 +123,25 @@ public class TransaccionEndpoint {
                     .build();
         }
 
-        return Response.ok(tr, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(tr), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(TransaccionDto dto) {
-        Transaccion tr = new Transaccion();
-
-        tr.setCuenta(this.cnDao.find(dto.getCuenta()));
-        tr.setFechaMovimiento(dto.getFechaMovimiento());
-        tr.setMonto(dto.getMonto());
-        tr.setOperacion(this.opDao.find(dto.getOperacion()));
+        Transaccion tr = createFromDto(dto);
 
         this.trDao.save(tr);
 
-        return Response.ok(tr).build();
+        return Response.ok(createResponseObject(tr)).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(TransaccionDto dto) throws RollbackException {
-        Transaccion tr = new Transaccion();
-
-        tr.setCuenta(this.cnDao.find(dto.getCuenta()));
-        tr.setFechaMovimiento(dto.getFechaMovimiento());
-        tr.setMonto(dto.getMonto());
-        tr.setOperacion(this.opDao.find(dto.getOperacion()));
-
+        Transaccion tr = createFromDto(dto);
+        
         Transaccion updatedTr = this.trDao.edit(tr);
         if (updatedTr == null) {
             return Response
@@ -107,7 +150,7 @@ public class TransaccionEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedTr).build();
+        return Response.ok(createResponseObject(updatedTr)).build();
     }
 
     @DELETE
@@ -123,6 +166,6 @@ public class TransaccionEndpoint {
                     .build();
         }
 
-        return Response.ok(tp).build();
+        return Response.ok(createResponseObject(tp)).build();
     }
 }
