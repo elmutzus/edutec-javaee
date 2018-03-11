@@ -82,16 +82,6 @@ public class Cuenta {
         this.transacciones = transacciones;
     }
 
-    public Cuenta(String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
-        this.moneda = moneda;
-        this.fechaApertura = fechaApertura;
-        this.estado = estado;
-        this.tipoCuenta = tipoCuenta;
-        this.cliente = cliente;
-        this.saldos = saldos;
-        this.transacciones = transacciones;
-    }
-
     /**
      * @return the id
      */

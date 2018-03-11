@@ -66,13 +66,6 @@ public class Municipio implements Serializable {
         this.clientes = clientes;
     }
 
-    public Municipio(String codigo, String nombre, Departamento departamento, List<Cliente> clientes) {
-        this.codigo = codigo;
-        this.nombre = nombre;
-        this.departamento = departamento;
-        this.clientes = clientes;
-    }
-
     public Integer getId() {
         return id;
     }

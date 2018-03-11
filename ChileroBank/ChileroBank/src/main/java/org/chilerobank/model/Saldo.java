@@ -58,11 +58,6 @@ public class Saldo {
         this.fecha = fecha;
     }
 
-    public Saldo(Cuenta cuenta, Date fecha) {
-        this.cuenta = cuenta;
-        this.fecha = fecha;
-    }
-
     /**
      * @return the id
      */

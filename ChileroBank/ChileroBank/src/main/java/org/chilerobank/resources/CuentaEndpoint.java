@@ -28,6 +28,7 @@ import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.CuentaDto;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.model.Cuenta;
+import org.chilerobank.model.Operacion;
 import org.chilerobank.model.Saldo;
 import org.chilerobank.model.Transaccion;
 
@@ -62,10 +63,116 @@ public class CuentaEndpoint {
         this.clDao = clDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Cuenta createResponseObject(Cuenta current) {
+        List<Saldo> actualSls = new ArrayList<>();
+
+        if (current.getSaldos() != null && current.getSaldos().size() > 0) {
+            current.getSaldos()
+                    .stream()
+                    .forEach((curSl) -> actualSls.add(
+                    new Saldo(
+                            curSl.getId(),
+                            null,
+                            curSl.getFecha()
+                    )
+            ));
+        }
+
+        List<Transaccion> actualTrxs = new ArrayList<>();
+
+        if (current.getTransacciones() != null && current.getTransacciones().size() > 0) {
+            current.getTransacciones()
+                    .stream()
+                    .forEach((curTrx) -> {
+                        Operacion op = curTrx.getOperacion();
+
+                        actualTrxs.add(
+                                new Transaccion(
+                                        curTrx.getId(),
+                                        curTrx.getFechaMovimiento(),
+                                        curTrx.getMonto(),
+                                        null,
+                                        new Operacion(
+                                                op.getId(),
+                                                op.getNombre(),
+                                                op.getDescripcion(),
+                                                null
+                                        )
+                                )
+                        );
+                    }
+                    );
+        }
+
+        return new Cuenta(
+                current.getId(),
+                current.getMoneda(),
+                current.getFechaApertura(),
+                current.getEstado(),
+                current.getTipoCuenta(),
+                current.getCliente(),
+                actualSls,
+                actualTrxs
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Cuenta createFromDto(CuentaDto dto) {
+        List<Saldo> actualSls = new ArrayList<>();
+
+        if (dto.getSaldos() != null && dto.getSaldos().size() > 0) {
+            dto.getSaldos()
+                    .stream()
+                    .forEach((id)
+                            -> actualSls.add(this.slDao.find(id))
+                    );
+        }
+
+        List<Transaccion> actualTrxs = new ArrayList<>();
+
+        if (dto.getTransacciones() != null && dto.getTransacciones().size() > 0) {
+            dto.getTransacciones()
+                    .stream()
+                    .forEach((id)
+                            -> actualTrxs.add(this.trxDao.find(id))
+                    );
+        }
+
+        return new Cuenta(
+                dto.getId(),
+                dto.getMoneda(),
+                dto.getFechaApertura(),
+                dto.getEstado(),
+                this.tpDao.find(dto.getTipoCuenta()),
+                this.clDao.find(dto.getCliente()),
+                actualSls,
+                actualTrxs
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Cuenta> findAll() {
-        return this.cntDao.findAll();
+        List<Cuenta> actualLst = new ArrayList<>();
+
+        this.cntDao.findAll()
+                .stream()
+                .forEach((currentObj)
+                        -> actualLst.add(createResponseObject(currentObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -81,67 +188,34 @@ public class CuentaEndpoint {
                     .build();
         }
 
-        return Response.ok(cl, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(cl), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(CuentaDto dto) {
-        Cuenta cnt = new Cuenta();
+        Integer id = dto.getId();
 
-        cnt.setCliente(this.clDao.find(dto.getCliente()));
-        cnt.setEstado(dto.getEstado());
-        cnt.setFechaApertura(dto.getFechaApertura());
-        cnt.setMoneda(dto.getMoneda());
-        cnt.setTipoCuenta(this.tpDao.find(dto.getTipoCuenta()));
+        Cuenta existent = this.cntDao.find(id);
 
-        List<Transaccion> trxs = new ArrayList<>();
-
-        for (Integer id : dto.getTransacciones()) {
-            trxs.add(this.trxDao.find(id));
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .build();
         }
 
-        cnt.setTransacciones(trxs);
-
-        List<Saldo> slds = new ArrayList<>();
-
-        for (Integer id : dto.getSaldos()) {
-            slds.add(this.slDao.find(id));
-        }
-
-        cnt.setSaldos(slds);
+        Cuenta cnt = createFromDto(dto);
 
         this.cntDao.save(cnt);
-        return Response.ok(cnt).build();
+        return Response.ok(createResponseObject(cnt)).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(CuentaDto dto) throws RollbackException {
-        Cuenta cnt = new Cuenta();
-
-        cnt.setCliente(this.clDao.find(dto.getCliente()));
-        cnt.setEstado(dto.getEstado());
-        cnt.setFechaApertura(dto.getFechaApertura());
-        cnt.setMoneda(dto.getMoneda());
-        cnt.setTipoCuenta(this.tpDao.find(dto.getTipoCuenta()));
-
-        List<Transaccion> trxs = new ArrayList<>();
-
-        for (Integer id : dto.getTransacciones()) {
-            trxs.add(this.trxDao.find(id));
-        }
-
-        cnt.setTransacciones(trxs);
-
-        List<Saldo> slds = new ArrayList<>();
-
-        for (Integer id : dto.getSaldos()) {
-            slds.add(this.slDao.find(id));
-        }
-
-        cnt.setSaldos(slds);
+        Cuenta cnt = createFromDto(dto);
 
         Cuenta updatedCnt = this.cntDao.edit(cnt);
         if (updatedCnt == null) {
@@ -151,7 +225,7 @@ public class CuentaEndpoint {
                     .build();
         }
 
-        return Response.ok(updatedCnt).build();
+        return Response.ok(createResponseObject(updatedCnt)).build();
     }
 
     @DELETE
@@ -167,6 +241,6 @@ public class CuentaEndpoint {
                     .build();
         }
 
-        return Response.ok(cnt).build();
+        return Response.ok(createResponseObject(cnt)).build();
     }
 }
