@@ -19,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.chilerobank.dao.ClienteDao;
 import org.chilerobank.dao.DepartamentoDao;
 import org.chilerobank.dao.MunicipioDao;
 import org.chilerobank.dto.ErrorMessageDto;
@@ -35,16 +36,19 @@ public class MunicipioEndpoint {
 
     final DepartamentoDao dptDao;
     final MunicipioDao mnDao;
+    final ClienteDao clDao;
 
     public MunicipioEndpoint() {
         this.dptDao = null;
         this.mnDao = null;
+        this.clDao = null;
     }
 
     @Inject
-    public MunicipioEndpoint(DepartamentoDao clDao, MunicipioDao mnDao) {
-        this.dptDao = clDao;
+    public MunicipioEndpoint(DepartamentoDao dpDao, MunicipioDao mnDao, ClienteDao clDao) {
+        this.dptDao = dpDao;
         this.mnDao = mnDao;
+        this.clDao = clDao;
     }
 
     @GET

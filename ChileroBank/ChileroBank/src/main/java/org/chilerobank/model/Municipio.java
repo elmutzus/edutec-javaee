@@ -16,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,17 +26,14 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "municipio")
 @NamedQueries({
-    // Distinct
     @NamedQuery(name = "municipio.findAll", query = "SELECT DISTINCT mn FROM Municipio mn LEFT JOIN FETCH mn.departamento")
     ,
-    //JOIN FETCH
     @NamedQuery(name = "municipio.findById", query = "SELECT mn FROM Municipio mn JOIN FETCH mn.departamento WHERE mn.id = :id")
 })
 public class Municipio implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipioGen")
-    @SequenceGenerator(name = "municipioGen", sequenceName = "municipio_seq", initialValue = 10)
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
@@ -50,6 +46,22 @@ public class Municipio implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "departamento")
     private Departamento departamento;
+
+    public Municipio() {
+    }
+
+    public Municipio(Integer id, String codigo, String nombre, Departamento departamento) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.departamento = departamento;
+    }
+
+    public Municipio(String codigo, String nombre, Departamento departamento) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.departamento = departamento;
+    }
 
     public Integer getId() {
         return id;

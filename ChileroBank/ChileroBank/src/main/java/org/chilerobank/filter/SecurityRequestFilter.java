@@ -12,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.ext.Provider;
+import org.chilerobank.dao.DepartamentoDao;
 import org.chilerobank.dao.UsuarioDao;
 
 /**
@@ -27,6 +28,9 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
     @Inject
     UsuarioDao usuarioDao;
 
+    @Inject
+    DepartamentoDao departamentoDao;
+
     @Override
     public void filter(final ContainerRequestContext requestContext) throws IOException {
         System.out.println("JAXRS Filter dice: Estoy filtrando ;)");
@@ -41,6 +45,7 @@ public class SecurityRequestFilter implements ContainerRequestFilter {
 
         System.out.println(em);
         System.out.println(usuarioDao);
+        System.out.println(departamentoDao);
 
     }
 }

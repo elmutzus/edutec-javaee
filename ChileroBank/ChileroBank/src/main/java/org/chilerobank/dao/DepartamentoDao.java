@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.chilerobank.model.Departamento;
+import org.chilerobank.model.Departamento;
 
 /**
  *
@@ -30,8 +31,41 @@ public class DepartamentoDao {
             return null;
         }
     }
+    
+    public Departamento find(String name) {
+        try {
+            return this.em
+                    .createNamedQuery("Departamento.findByName", Departamento.class)
+                    .setParameter("nameDepartamento", name)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 
     public List<Departamento> findAll() {
         return this.em.createNamedQuery("Departamento.findAll").getResultList();
+    }
+
+    public Departamento save(Departamento entity) {
+        this.em.persist(entity);
+        return entity;
+    }
+
+    public Departamento edit(Departamento entity) {
+        Departamento dep = this.find(entity.getId());
+        if (dep != null) {
+            dep.setCodigo(entity.getCodigo());
+            dep.setNombre(entity.getNombre());
+            dep.setMunicipios(entity.getMunicipios());
+            this.em.merge(dep);
+        }
+        return dep;
+    }
+
+    public Departamento remove(Integer id) {
+        Departamento dep = this.find(id);
+        this.em.remove(dep);
+        return dep;
     }
 }

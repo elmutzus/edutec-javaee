@@ -73,6 +73,7 @@ public class UsuarioEndpoint {
     }
 
     @POST
+    @Path("/")
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(UsuarioDto dto) {
