@@ -27,6 +27,7 @@ import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.ClienteDto;
 import org.chilerobank.model.Cliente;
 import org.chilerobank.model.Cuenta;
+import org.chilerobank.model.Municipio;
 
 /**
  *
@@ -76,6 +77,16 @@ public class ClienteEndpoint {
                         null
                 ))
                 );
+        
+        Municipio currentMn = current.getMunicipio();
+        
+        Municipio actualMn = new Municipio(
+                currentMn.getId(),
+                currentMn.getCodigo(),
+                currentMn.getNombre(),
+                null,
+                null
+        );
 
         return new Cliente(
                 current.getId(),
@@ -83,7 +94,7 @@ public class ClienteEndpoint {
                 current.getDireccion(),
                 current.getNit(),
                 current.getFechaNacimiento(),
-                current.getMunicipio(),
+                actualMn,
                 actualLst
         );
     }
