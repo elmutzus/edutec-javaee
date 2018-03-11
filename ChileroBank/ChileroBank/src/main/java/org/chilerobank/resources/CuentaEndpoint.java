@@ -72,6 +72,29 @@ public class CuentaEndpoint {
      * @return
      */
     public Cuenta createResponseObject(Cuenta current) {
+
+        TipoCuenta currentTp = current.getTipoCuenta();
+
+        TipoCuenta actualTp = new TipoCuenta(
+                currentTp.getId(),
+                currentTp.getNombre(),
+                currentTp.getDescripcion(),
+                currentTp.getTasaInteres(),
+                null
+        );
+
+        Cliente currentCl = current.getCliente();
+
+        Cliente actualCl = new Cliente(
+                currentCl.getId(),
+                currentCl.getNombre(),
+                currentCl.getDireccion(),
+                currentCl.getNit(),
+                currentCl.getFechaNacimiento(),
+                null,
+                null
+        );
+        
         List<Saldo> actualSls = new ArrayList<>();
 
         if (current.getSaldos() != null && current.getSaldos().size() > 0) {
@@ -107,28 +130,6 @@ public class CuentaEndpoint {
                     }
                     );
         }
-
-        TipoCuenta currentTp = current.getTipoCuenta();
-
-        TipoCuenta actualTp = new TipoCuenta(
-                currentTp.getId(),
-                currentTp.getNombre(),
-                currentTp.getDescripcion(),
-                currentTp.getTasaInteres(),
-                null
-        );
-
-        Cliente currentCl = current.getCliente();
-
-        Cliente actualCl = new Cliente(
-                currentCl.getId(),
-                currentCl.getNombre(),
-                currentCl.getDireccion(),
-                currentCl.getNit(),
-                currentCl.getFechaNacimiento(),
-                currentCl.getMunicipio(),
-                null
-        );
 
         return new Cuenta(
                 current.getId(),
