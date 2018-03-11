@@ -26,6 +26,7 @@ import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TransaccionDto;
 import org.chilerobank.model.Cuenta;
+import org.chilerobank.model.Operacion;
 import org.chilerobank.model.Transaccion;
 
 /**
@@ -62,6 +63,15 @@ public class TransaccionEndpoint {
     public Transaccion createResponseObject(Transaccion current) {
         Cuenta curCuenta = current.getCuenta();
 
+        Operacion currentOp = current.getOperacion();
+
+        Operacion actualOp = new Operacion(
+                currentOp.getId(),
+                currentOp.getNombre(),
+                currentOp.getDescripcion(),
+                null
+        );
+
         return new Transaccion(
                 current.getId(),
                 current.getFechaMovimiento(),
@@ -76,7 +86,7 @@ public class TransaccionEndpoint {
                         null,
                         null
                 ),
-                current.getOperacion()
+                actualOp
         );
     }
 
@@ -141,7 +151,7 @@ public class TransaccionEndpoint {
     @Produces({"application/json"})
     public Response update(TransaccionDto dto) throws RollbackException {
         Transaccion tr = createFromDto(dto);
-        
+
         Transaccion updatedTr = this.trDao.edit(tr);
         if (updatedTr == null) {
             return Response
