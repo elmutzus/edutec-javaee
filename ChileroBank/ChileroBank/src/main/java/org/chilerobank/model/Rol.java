@@ -30,6 +30,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "rol.findAll", query = "SELECT DISTINCT r FROM Rol r")
     ,
     @NamedQuery(name = "rol.findById", query = "SELECT r FROM Rol r WHERE r.id = :id")
+        ,
+    @NamedQuery(name = "rol.findByName", query = "SELECT r FROM Rol r WHERE r.nombre = :name")
 })
 public class Rol implements Serializable {
 
@@ -44,7 +46,7 @@ public class Rol implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
 
     public Rol() {
@@ -52,12 +54,6 @@ public class Rol implements Serializable {
 
     public Rol(Integer id, String nombre, String descripcion, List<Usuario> usuarios) {
         this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.usuarios = usuarios;
-    }
-
-    public Rol(String nombre, String descripcion, List<Usuario> usuarios) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.usuarios = usuarios;

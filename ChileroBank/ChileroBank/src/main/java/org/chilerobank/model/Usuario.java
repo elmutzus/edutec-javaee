@@ -59,7 +59,7 @@ public class Usuario implements Serializable {
     private String telefono;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rol_id")
+    @JoinColumn(name = "rol")
     private Rol rol;
 
     public Usuario() {
@@ -67,16 +67,6 @@ public class Usuario implements Serializable {
 
     public Usuario(Integer id, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
         this.id = id;
-        this.codigo = codigo;
-        this.email = email;
-        this.fechaNacimiento = fechaNacimiento;
-        this.nombre = nombre;
-        this.password = password;
-        this.telefono = telefono;
-        this.rol = rol;
-    }
-
-    public Usuario(String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
         this.codigo = codigo;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;

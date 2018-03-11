@@ -18,6 +18,16 @@ public class RolDto {
     private String descripcion;
     private List<Integer> usuarios;
 
+    public RolDto() {
+    }
+
+    public RolDto(Integer id, String nombre, String descripcion, List<Integer> usuarios) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.usuarios = usuarios;
+    }
+
     /**
      * @return the id
      */

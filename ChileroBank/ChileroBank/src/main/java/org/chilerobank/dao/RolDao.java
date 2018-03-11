@@ -34,6 +34,17 @@ public class RolDao {
             return null;
         }
     }
+    
+    public Rol find(String name) {
+        try {
+            return this.em
+                    .createNamedQuery("rol.findByName", Rol.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 
     public Rol save(Rol entity) {
         this.em.persist(entity);

@@ -49,10 +49,75 @@ public class RolEndpoint {
         this.usDao = usDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Rol createResponseObject(Rol current) {
+        List<Usuario> actualLst = new ArrayList<>();
+
+        current.getUsuarios()
+                .stream()
+                .forEach((cur) -> actualLst.add(
+                new Usuario(
+                        cur.getId(),
+                        cur.getCodigo(),
+                        cur.getEmail(),
+                        cur.getFechaNacimiento(),
+                        cur.getNombre(),
+                        cur.getPassword(),
+                        cur.getTelefono(),
+                        null
+                ))
+                );
+
+        return new Rol(
+                current.getId(),
+                current.getNombre(),
+                current.getDescripcion(),
+                actualLst
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Rol createFromDto(RolDto dto) {
+        List<Usuario> actualLst = new ArrayList<>();
+
+        if (dto.getUsuarios() != null && dto.getUsuarios().size() > 0) {
+            dto.getUsuarios()
+                    .stream()
+                    .forEach((id)
+                            -> actualLst.add(this.usDao.find(id))
+                    );
+        }
+
+        return new Rol(
+                dto.getId(),
+                dto.getNombre(),
+                dto.getDescripcion(),
+                actualLst
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Rol> findAll() {
-        return this.rolDao.findAll();
+        List<Rol> actualLst = new ArrayList<>();
+
+        this.rolDao.findAll()
+                .stream()
+                .forEach((curObj)
+                        -> actualLst.add(createResponseObject(curObj))
+                );
+
+        return actualLst;
     }
 
     @GET
@@ -68,74 +133,59 @@ public class RolEndpoint {
                     .build();
         }
 
-        return Response.ok(rl, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(rl), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(RolDto dto) {
-        Rol rl = new Rol();
+        String name = dto.getNombre();
 
-        rl.setDescripcion(dto.getDescripcion());
-        rl.setNombre(dto.getNombre());
+        Rol existent = this.rolDao.find(name);
 
-        List<Usuario> usrs = new ArrayList<>();
-
-        for (Integer id : dto.getUsuarios()) {
-            Usuario usr = this.usDao.find(id);
-
-            usrs.add(usr);
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .build();
         }
 
-        rl.setUsuarios(usrs);
+        Rol rl = createFromDto(dto);
 
         this.rolDao.save(rl);
-        return Response.ok(rl).build();
+        return Response.ok(createResponseObject(rl)).build();
     }
 
     @PUT
     @Produces({"application/json"})
     public Response update(RolDto dto) throws RollbackException {
-        Rol rl = new Rol();
+        Rol rl = createFromDto(dto);
 
-        rl.setDescripcion(dto.getDescripcion());
-        rl.setNombre(dto.getNombre());
-
-        List<Usuario> usrs = new ArrayList<>();
-
-        for (Integer id : dto.getUsuarios()) {
-            Usuario usr = this.usDao.find(id);
-
-            usrs.add(usr);
-        }
-
-        rl.setUsuarios(usrs);
-
-        Rol updatedUsr = this.rolDao.edit(rl);
-        if (updatedUsr == null) {
+        Rol updatedRl = this.rolDao.edit(rl);
+        if (updatedRl == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(updatedUsr).build();
+        return Response.ok(createResponseObject(updatedRl)).build();
     }
 
     @DELETE
     @Path("{id}")
     @Produces({"application/json"})
     public Response delete(@PathParam("id") Integer id) {
-        Rol usr = this.rolDao.remove(id);
+        Rol rl = this.rolDao.remove(id);
 
-        if (usr == null) {
+        if (rl == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(usr).build();
+        return Response.ok(createResponseObject(rl)).build();
     }
 }
