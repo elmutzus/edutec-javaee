@@ -5,6 +5,7 @@
  */
 package org.chilerobank.resources;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -24,6 +25,7 @@ import org.chilerobank.dao.DepartamentoDao;
 import org.chilerobank.dao.MunicipioDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.MunicipioDto;
+import org.chilerobank.model.Cliente;
 import org.chilerobank.model.Municipio;
 
 /**
@@ -51,38 +53,101 @@ public class MunicipioEndpoint {
         this.clDao = clDao;
     }
 
+    /**
+     * Creates a response object from an existing one
+     *
+     * @param current
+     * @return
+     */
+    public Municipio createResponsObject(Municipio current) {
+        List<Cliente> actualLst = new ArrayList<>();
+
+        current.getClientes()
+                .stream()
+                .forEach((currentCl) -> actualLst.add(
+                new Cliente(currentCl.getNombre(), currentCl.getDireccion(), currentCl.getNit(), currentCl.getFechaNacimiento(), currentCl.getMunicipio(), null))
+                );
+
+        return new Municipio(
+                current.getCodigo(),
+                current.getNombre(),
+                current.getDepartamento(),
+                actualLst
+        );
+    }
+
+    /**
+     * Creates a response object model from a DTO
+     *
+     * @param dto
+     * @return
+     */
+    public Municipio createFromDto(MunicipioDto dto) {
+        List<Cliente> actualLst = new ArrayList<>();
+
+        if (dto.getClientes() != null && dto.getClientes().size() > 0) {
+            dto.getClientes()
+                    .stream()
+                    .forEach((mnId)
+                            -> actualLst.add(this.clDao.find(mnId))
+                    );
+        }
+
+        return new Municipio(
+                dto.getCodigo(),
+                dto.getNombre(),
+                this.dptDao.find(dto.getDepartamento()),
+                actualLst
+        );
+    }
+
     @GET
     @Produces({"application/json"})
     public List<Municipio> findAll() {
-        return this.mnDao.findAll();
+        List<Municipio> actualLst = new ArrayList<>();
+
+        this.mnDao.findAll()
+                .stream()
+                .forEach((currentObj)
+                        -> actualLst.add(createResponsObject(currentObj))
+                );
+
+        return actualLst;
     }
 
     @GET
     @Path("{id}")
     @Produces({"application/json"})
     public Response findById(@PathParam("id") Integer id) {
-        Municipio cl = this.mnDao.find(id);
+        Municipio mn = this.mnDao.find(id);
 
-        if (cl == null) {
+        if (mn == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
                     .build();
         }
 
-        return Response.ok(cl, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponsObject(mn), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(MunicipioDto dto) {
-        Municipio mn = new Municipio();
+        String name = dto.getNombre();
 
-        mn.setCodigo(dto.getCodigo());
-        mn.setDepartamento(this.dptDao.find(dto.getDepartamento()));
-        mn.setNombre(dto.getNombre());
+        Municipio existent = this.mnDao.find(name);
 
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .build();
+        }
+
+        Municipio mn = createFromDto(dto);
+        
         this.mnDao.save(mn);
         return Response.ok(mn).build();
     }
@@ -90,11 +155,7 @@ public class MunicipioEndpoint {
     @PUT
     @Produces({"application/json"})
     public Response update(MunicipioDto dto) throws RollbackException {
-        Municipio mn = new Municipio();
-
-        mn.setCodigo(dto.getCodigo());
-        mn.setDepartamento(this.dptDao.find(dto.getDepartamento()));
-        mn.setNombre(dto.getNombre());
+        Municipio mn = createFromDto(dto);
 
         Municipio updatedMn = this.mnDao.edit(mn);
         if (updatedMn == null) {

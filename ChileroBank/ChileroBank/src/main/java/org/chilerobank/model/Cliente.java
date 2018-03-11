@@ -62,6 +62,28 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Cuenta> cuentas;
 
+    public Cliente() {
+    }
+
+    public Cliente(Integer id, String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, List<Cuenta> cuentas) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.nit = nit;
+        this.fechaNacimiento = fechaNacimiento;
+        this.municipio = municipio;
+        this.cuentas = cuentas;
+    }
+    
+        public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, List<Cuenta> cuentas) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.nit = nit;
+        this.fechaNacimiento = fechaNacimiento;
+        this.municipio = municipio;
+        this.cuentas = cuentas;
+    }
+
     /**
      * @return the id
      */

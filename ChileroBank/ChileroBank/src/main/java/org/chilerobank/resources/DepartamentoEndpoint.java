@@ -69,7 +69,7 @@ public class DepartamentoEndpoint {
         currentDep.getMunicipios()
                 .stream()
                 .forEach((currentMun) -> actualMns.add(
-                new Municipio(currentMun.getCodigo(), currentMun.getNombre(), currentDep)
+                new Municipio(currentMun.getCodigo(), currentMun.getNombre(), currentDep, null)
         ));
 
         return new Departamento(currentDep.getCodigo(), currentDep.getNombre(), actualMns);
@@ -132,16 +132,16 @@ public class DepartamentoEndpoint {
     @Produces({"application/json"})
     public Response create(DepartamentoDto dto) {
         String name = dto.getNombre();
-        
+
         Departamento existent = this.dpDao.find(name);
-        
-        if(existent != null){
+
+        if (existent != null) {
             return Response
                     .status(Response.Status.CONFLICT)
                     .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
                     .build();
         }
-        
+
         Departamento actualDep = createFromDto(dto);
         this.dpDao.save(actualDep);
         return Response.ok(actualDep).build();

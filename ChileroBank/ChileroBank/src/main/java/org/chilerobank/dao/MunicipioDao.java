@@ -31,6 +31,17 @@ public class MunicipioDao {
         }
     }
 
+    public Municipio find(String nombre) {
+        try {
+            return this.em
+                    .createNamedQuery("municipio.findByName", Municipio.class)
+                    .setParameter("nombre", nombre)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public List<Municipio> findAll() {
         return this.em.createNamedQuery("municipio.findAll").getResultList();
     }

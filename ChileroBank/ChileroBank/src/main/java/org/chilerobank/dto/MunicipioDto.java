@@ -5,6 +5,8 @@
  */
 package org.chilerobank.dto;
 
+import java.util.List;
+
 /**
  *
  * @author Elder Mutzus <elmutzus@gmail.com>
@@ -15,6 +17,7 @@ public class MunicipioDto {
     private String codigo;
     private String nombre;
     private Integer departamento;
+    private List<Integer> clientes;
 
     /**
      * @return the id
@@ -70,6 +73,20 @@ public class MunicipioDto {
      */
     public void setDepartamento(Integer departamento) {
         this.departamento = departamento;
+    }
+
+    /**
+     * @return the clientes
+     */
+    public List<Integer> getClientes() {
+        return clientes;
+    }
+
+    /**
+     * @param clientes the clientes to set
+     */
+    public void setClientes(List<Integer> clientes) {
+        this.clientes = clientes;
     }
 
 }

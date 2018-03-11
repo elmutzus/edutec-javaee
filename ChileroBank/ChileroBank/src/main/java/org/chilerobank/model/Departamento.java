@@ -29,12 +29,12 @@ import javax.persistence.Table;
     @NamedQuery(name = "Departamento.findAll", query = "SELECT DISTINCT d FROM Departamento d LEFT JOIN FETCH d.municipios")
     ,
     @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.id = :idDepartamento")
-        ,
+    ,
     @NamedQuery(name = "Departamento.findByName", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.nombre = :nameDepartamento")
 })
 public class Departamento implements Serializable {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
