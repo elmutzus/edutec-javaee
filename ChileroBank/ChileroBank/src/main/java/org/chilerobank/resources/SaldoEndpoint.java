@@ -24,6 +24,7 @@ import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.SaldoDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.SaldoDto;
+import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Saldo;
 
 /**
@@ -55,9 +56,22 @@ public class SaldoEndpoint {
      * @return
      */
     public Saldo createResponseObject(Saldo current) {
+        Cuenta currentCn = current.getCuenta();
+        
+        Cuenta actualCn = new Cuenta(
+                currentCn.getId(),
+                currentCn.getMoneda(),
+                currentCn.getFechaApertura(),
+                currentCn.getEstado(),
+                null,
+                null,
+                null,
+                null
+        );
+        
         return new Saldo(
                 current.getId(),
-                current.getCuenta(),
+                actualCn,
                 current.getFecha(),
                 current.getMonto()
         );
