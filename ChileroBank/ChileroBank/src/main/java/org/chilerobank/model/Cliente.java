@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Cliente {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -74,8 +74,8 @@ public class Cliente {
         this.municipio = municipio;
         this.cuentas = cuentas;
     }
-    
-        public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, List<Cuenta> cuentas) {
+
+    public Cliente(String nombre, String direccion, String nit, Date fechaNacimiento, Municipio municipio, List<Cuenta> cuentas) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.nit = nit;

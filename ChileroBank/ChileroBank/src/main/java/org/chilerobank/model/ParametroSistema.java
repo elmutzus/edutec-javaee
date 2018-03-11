@@ -49,6 +49,11 @@ public class ParametroSistema implements Serializable {
         this.nombre = nombre;
         this.valor = valor;
     }
+    
+    public ParametroSistema(String nombre, String valor) {
+        this.nombre = nombre;
+        this.valor = valor;
+    }
 
     public Integer getId() {
         return id;

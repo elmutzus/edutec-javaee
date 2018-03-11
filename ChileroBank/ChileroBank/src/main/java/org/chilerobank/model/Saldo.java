@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Saldo {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -49,6 +49,19 @@ public class Saldo {
     @Column(name = "fecha")
     private Date fecha;
 
+    public Saldo() {
+    }
+
+    public Saldo(Integer id, Cuenta cuenta, Date fecha) {
+        this.id = id;
+        this.cuenta = cuenta;
+        this.fecha = fecha;
+    }
+
+    public Saldo(Cuenta cuenta, Date fecha) {
+        this.cuenta = cuenta;
+        this.fecha = fecha;
+    }
 
     /**
      * @return the id

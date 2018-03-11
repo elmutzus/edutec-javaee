@@ -29,7 +29,7 @@ import javax.persistence.Table;
 })
 public class TipoCuenta {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -42,6 +42,22 @@ public class TipoCuenta {
 
     @Column(name = "tasa_interes")
     private Float tasaInteres;
+
+    public TipoCuenta() {
+    }
+
+    public TipoCuenta(Integer id, String nombre, String descripcion, Float tasaInteres) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tasaInteres = tasaInteres;
+    }
+
+    public TipoCuenta(String nombre, String descripcion, Float tasaInteres) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.tasaInteres = tasaInteres;
+    }
 
     /**
      * @return the id

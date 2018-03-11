@@ -40,6 +40,20 @@ public class Operacion {
     @Column(name = "descripcion")
     private String descripcion;
 
+    public Operacion() {
+    }
+
+    public Operacion(Integer id, String nombre, String descripcion) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+    
+    public Operacion(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
+
     /**
      * @return the id
      */

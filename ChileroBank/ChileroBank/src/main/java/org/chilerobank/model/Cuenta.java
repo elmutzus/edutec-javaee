@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Cuenta {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -67,6 +67,30 @@ public class Cuenta {
 
     @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Transaccion> transacciones;
+
+    public Cuenta() {
+    }
+
+    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
+        this.id = id;
+        this.moneda = moneda;
+        this.fechaApertura = fechaApertura;
+        this.estado = estado;
+        this.tipoCuenta = tipoCuenta;
+        this.cliente = cliente;
+        this.saldos = saldos;
+        this.transacciones = transacciones;
+    }
+
+    public Cuenta(String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
+        this.moneda = moneda;
+        this.fechaApertura = fechaApertura;
+        this.estado = estado;
+        this.tipoCuenta = tipoCuenta;
+        this.cliente = cliente;
+        this.saldos = saldos;
+        this.transacciones = transacciones;
+    }
 
     /**
      * @return the id

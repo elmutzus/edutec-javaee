@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Rol implements Serializable {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -46,6 +46,22 @@ public class Rol implements Serializable {
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Usuario> usuarios;
+
+    public Rol() {
+    }
+
+    public Rol(Integer id, String nombre, String descripcion, List<Usuario> usuarios) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.usuarios = usuarios;
+    }
+
+    public Rol(String nombre, String descripcion, List<Usuario> usuarios) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.usuarios = usuarios;
+    }
 
     /**
      * @return the id

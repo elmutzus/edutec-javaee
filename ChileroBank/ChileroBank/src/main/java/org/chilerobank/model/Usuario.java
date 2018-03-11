@@ -34,7 +34,7 @@ import javax.persistence.TemporalType;
 })
 public class Usuario implements Serializable {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -61,6 +61,30 @@ public class Usuario implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rol_id")
     private Rol rol;
+
+    public Usuario() {
+    }
+
+    public Usuario(Integer id, String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
+        this.id = id;
+        this.codigo = codigo;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.nombre = nombre;
+        this.password = password;
+        this.telefono = telefono;
+        this.rol = rol;
+    }
+
+    public Usuario(String codigo, String email, Date fechaNacimiento, String nombre, String password, String telefono, Rol rol) {
+        this.codigo = codigo;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.nombre = nombre;
+        this.password = password;
+        this.telefono = telefono;
+        this.rol = rol;
+    }
 
     /**
      * @return the id

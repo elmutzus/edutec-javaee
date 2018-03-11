@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Transaccion {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -55,6 +55,24 @@ public class Transaccion {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "operacion_id")
     private Operacion operacion;
+
+    public Transaccion() {
+    }
+
+    public Transaccion(Integer id, Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
+        this.id = id;
+        this.fechaMovimiento = fechaMovimiento;
+        this.monto = monto;
+        this.cuenta = cuenta;
+        this.operacion = operacion;
+    }
+
+    public Transaccion(Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
+        this.fechaMovimiento = fechaMovimiento;
+        this.monto = monto;
+        this.cuenta = cuenta;
+        this.operacion = operacion;
+    }
 
     /**
      * @return the id
