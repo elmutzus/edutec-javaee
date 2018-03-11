@@ -59,16 +59,17 @@ public class MunicipioEndpoint {
      * @param current
      * @return
      */
-    public Municipio createResponsObject(Municipio current) {
+    public Municipio createResponseObject(Municipio current) {
         List<Cliente> actualLst = new ArrayList<>();
 
         current.getClientes()
                 .stream()
                 .forEach((currentCl) -> actualLst.add(
-                new Cliente(currentCl.getNombre(), currentCl.getDireccion(), currentCl.getNit(), currentCl.getFechaNacimiento(), currentCl.getMunicipio(), null))
+                new Cliente(currentCl.getId(), currentCl.getNombre(), currentCl.getDireccion(), currentCl.getNit(), currentCl.getFechaNacimiento(), currentCl.getMunicipio(), null))
                 );
 
         return new Municipio(
+                current.getId(),
                 current.getCodigo(),
                 current.getNombre(),
                 current.getDepartamento(),
@@ -94,6 +95,7 @@ public class MunicipioEndpoint {
         }
 
         return new Municipio(
+                dto.getId(),
                 dto.getCodigo(),
                 dto.getNombre(),
                 this.dptDao.find(dto.getDepartamento()),
@@ -109,7 +111,7 @@ public class MunicipioEndpoint {
         this.mnDao.findAll()
                 .stream()
                 .forEach((currentObj)
-                        -> actualLst.add(createResponsObject(currentObj))
+                        -> actualLst.add(createResponseObject(currentObj))
                 );
 
         return actualLst;
@@ -128,7 +130,7 @@ public class MunicipioEndpoint {
                     .build();
         }
 
-        return Response.ok(createResponsObject(mn), MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(mn), MediaType.APPLICATION_JSON).build();
     }
 
     @POST

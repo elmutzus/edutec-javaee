@@ -31,6 +31,17 @@ public class ClienteDao {
         }
     }
 
+    public Cliente find(String nombre) {
+        try {
+            return this.em
+                    .createNamedQuery("cliente.findByName", Cliente.class)
+                    .setParameter("nombre", nombre)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public List<Cliente> findAll() {
         return this.em.createNamedQuery("cliente.findAll").getResultList();
     }

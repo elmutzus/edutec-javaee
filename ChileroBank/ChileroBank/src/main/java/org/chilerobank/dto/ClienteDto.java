@@ -6,6 +6,7 @@
 package org.chilerobank.dto;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -19,7 +20,7 @@ public class ClienteDto {
     private String nit;
     private Date fechaNacimiento;
     private Integer municipio;
-
+    private List<Integer> cuentas;
 
     /**
      * @return the id
@@ -103,6 +104,20 @@ public class ClienteDto {
      */
     public void setMunicipio(Integer municipio) {
         this.municipio = municipio;
+    }
+
+    /**
+     * @return the cuentas
+     */
+    public List<Integer> getCuentas() {
+        return cuentas;
+    }
+
+    /**
+     * @param cuentas the cuentas to set
+     */
+    public void setCuentas(List<Integer> cuentas) {
+        this.cuentas = cuentas;
     }
 
 }

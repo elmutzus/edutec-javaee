@@ -55,11 +55,11 @@ public class Cuenta {
     private Integer estado;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tipo_cuenta_id")
+    @JoinColumn(name = "tipo_cuenta")
     private TipoCuenta tipoCuenta;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "cliente_id")
+    @JoinColumn(name = "cliente")
     private Cliente cliente;
 
     @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "cliente.findAll", query = "SELECT DISTINCT cl FROM Cliente cl LEFT JOIN FETCH cl.cuentas")
     ,
     @NamedQuery(name = "cliente.findById", query = "SELECT cl FROM Cliente cl LEFT JOIN FETCH cl.cuentas WHERE cl.id = :id")
+    ,
+    @NamedQuery(name = "cliente.findByName", query = "SELECT cl FROM Cliente cl LEFT JOIN FETCH cl.cuentas WHERE cl.nombre = :nombre")
 })
 public class Cliente {
 

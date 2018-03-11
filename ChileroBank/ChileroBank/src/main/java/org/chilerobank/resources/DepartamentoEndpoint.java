@@ -69,10 +69,20 @@ public class DepartamentoEndpoint {
         currentDep.getMunicipios()
                 .stream()
                 .forEach((currentMun) -> actualMns.add(
-                new Municipio(currentMun.getCodigo(), currentMun.getNombre(), currentDep, null)
+                new Municipio(
+                        currentMun.getId(),
+                        currentMun.getCodigo(),
+                        currentMun.getNombre(),
+                        currentDep,
+                        null)
         ));
 
-        return new Departamento(currentDep.getCodigo(), currentDep.getNombre(), actualMns);
+        return new Departamento(
+                currentDep.getId(),
+                currentDep.getCodigo(),
+                currentDep.getNombre(),
+                actualMns
+        );
     }
 
     /**
@@ -93,7 +103,10 @@ public class DepartamentoEndpoint {
         }
 
         return new Departamento(
-                dto.getCodigo(), dto.getNombre(), actualMns
+                dto.getId(),
+                dto.getCodigo(),
+                dto.getNombre(),
+                actualMns
         );
     }
 
