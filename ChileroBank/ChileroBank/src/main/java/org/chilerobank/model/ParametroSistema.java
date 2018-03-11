@@ -22,11 +22,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "parametro_sistema")
 @NamedQueries({
-    // Distinct
     @NamedQuery(name = "parametroSistema.findAll", query = "Select DISTINCT d from ParametroSistema d")
     ,
-    //JOIN FETCH
     @NamedQuery(name = "parametroSistema.findById", query = "Select d from ParametroSistema d WHERE d.id = :id")
+        ,
+    @NamedQuery(name = "parametroSistema.findByName", query = "Select d from ParametroSistema d WHERE d.nombre = :name")
 })
 public class ParametroSistema implements Serializable {
 
@@ -46,11 +46,6 @@ public class ParametroSistema implements Serializable {
 
     public ParametroSistema(Integer id, String nombre, String valor) {
         this.id = id;
-        this.nombre = nombre;
-        this.valor = valor;
-    }
-    
-    public ParametroSistema(String nombre, String valor) {
         this.nombre = nombre;
         this.valor = valor;
     }

@@ -30,6 +30,17 @@ public class ParametroSistemaDao {
             return null;
         }
     }
+    
+    public ParametroSistema find(String name) {
+        try {
+            return this.em
+                    .createNamedQuery("parametroSistema.findByName", ParametroSistema.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 
     public List<ParametroSistema> findAll() {
         return this.em.createNamedQuery("parametroSistema.findAll").getResultList();
