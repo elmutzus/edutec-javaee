@@ -30,6 +30,17 @@ public class OperacionDao {
             return null;
         }
     }
+    
+    public Operacion find(String name) {
+        try {
+            return this.em
+                    .createNamedQuery("operacion.findByName", Operacion.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
 
     public List<Operacion> findAll() {
         return this.em.createNamedQuery("operacion.findAll").getResultList();

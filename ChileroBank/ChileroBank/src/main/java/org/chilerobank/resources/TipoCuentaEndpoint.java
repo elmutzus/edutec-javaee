@@ -24,7 +24,6 @@ import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.TipoCuentaDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TipoCuentaDto;
-import org.chilerobank.model.Cliente;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.TipoCuenta;
 
@@ -136,7 +135,7 @@ public class TipoCuentaEndpoint {
                     .build();
         }
 
-        return Response.ok(tp, MediaType.APPLICATION_JSON).build();
+        return Response.ok(createResponseObject(tp), MediaType.APPLICATION_JSON).build();
     }
 
     @POST
@@ -158,7 +157,7 @@ public class TipoCuentaEndpoint {
 
         this.tpDao.save(tp);
 
-        return Response.ok(tp).build();
+        return Response.ok(createResponseObject(tp)).build();
     }
 
     @PUT

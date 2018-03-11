@@ -28,10 +28,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "transaccion")
 @NamedQueries({
-    // Distinct
     @NamedQuery(name = "transaccion.findAll", query = "SELECT DISTINCT trx FROM Transaccion trx")
     ,
-    //JOIN FETCH
     @NamedQuery(name = "transaccion.findById", query = "SELECT trx FROM Transaccion trx WHERE trx.id = :id")
 })
 public class Transaccion {
@@ -49,11 +47,11 @@ public class Transaccion {
     private Float monto;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "cuenta_id")
+    @JoinColumn(name = "cuenta")
     private Cuenta cuenta;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "operacion_id")
+    @JoinColumn(name = "operacion")
     private Operacion operacion;
 
     public Transaccion() {
@@ -61,13 +59,6 @@ public class Transaccion {
 
     public Transaccion(Integer id, Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
         this.id = id;
-        this.fechaMovimiento = fechaMovimiento;
-        this.monto = monto;
-        this.cuenta = cuenta;
-        this.operacion = operacion;
-    }
-
-    public Transaccion(Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
         this.fechaMovimiento = fechaMovimiento;
         this.monto = monto;
         this.cuenta = cuenta;

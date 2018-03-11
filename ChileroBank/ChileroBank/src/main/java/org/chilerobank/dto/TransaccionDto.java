@@ -12,11 +12,23 @@ import java.util.Date;
  * @author Elder Mutzus <elmutzus@gmail.com>
  */
 public class TransaccionDto {
+
     private Integer id;
     private Date fechaMovimiento;
     private Float monto;
     private Integer cuenta;
     private Integer operacion;
+
+    public TransaccionDto() {
+    }
+
+    public TransaccionDto(Integer id, Date fechaMovimiento, Float monto, Integer cuenta, Integer operacion) {
+        this.id = id;
+        this.fechaMovimiento = fechaMovimiento;
+        this.monto = monto;
+        this.cuenta = cuenta;
+        this.operacion = operacion;
+    }
 
     /**
      * @return the id
@@ -87,6 +99,5 @@ public class TransaccionDto {
     public void setOperacion(Integer operacion) {
         this.operacion = operacion;
     }
-    
-    
+
 }

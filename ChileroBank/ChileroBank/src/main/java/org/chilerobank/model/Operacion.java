@@ -5,13 +5,17 @@
  */
 package org.chilerobank.model;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -21,15 +25,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "operacion")
 @NamedQueries({
-    // Distinct
     @NamedQuery(name = "operacion.findAll", query = "SELECT DISTINCT op FROM Operacion op")
     ,
-    //JOIN FETCH
     @NamedQuery(name = "operacion.findById", query = "SELECT op FROM Operacion op WHERE op.id = :id")
+    ,
+    @NamedQuery(name = "operacion.findByName", query = "SELECT op FROM Operacion op WHERE op.nombre = :name")
 })
 public class Operacion {
 
-    @Id 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
@@ -40,18 +44,17 @@ public class Operacion {
     @Column(name = "descripcion")
     private String descripcion;
 
+    @OneToMany(mappedBy = "operacion", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Transaccion> transacciones;
+
     public Operacion() {
     }
 
-    public Operacion(Integer id, String nombre, String descripcion) {
+    public Operacion(Integer id, String nombre, String descripcion, List<Transaccion> transacciones) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
-    }
-    
-    public Operacion(String nombre, String descripcion) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        this.transacciones = transacciones;
     }
 
     /**
@@ -94,5 +97,19 @@ public class Operacion {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the transacciones
+     */
+    public List<Transaccion> getTransacciones() {
+        return transacciones;
+    }
+
+    /**
+     * @param transacciones the transacciones to set
+     */
+    public void setTransacciones(List<Transaccion> transacciones) {
+        this.transacciones = transacciones;
     }
 }
