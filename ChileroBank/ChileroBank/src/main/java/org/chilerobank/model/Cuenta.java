@@ -50,6 +50,9 @@ public class Cuenta {
 
     @Column(name = "estado")
     private Integer estado;
+    
+    @Column(name = "monto")
+    private Float monto;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_cuenta")
@@ -68,7 +71,7 @@ public class Cuenta {
     public Cuenta() {
     }
 
-    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones) {
+    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones, Float monto) {
         this.id = id;
         this.moneda = moneda;
         this.fechaApertura = fechaApertura;
@@ -77,6 +80,7 @@ public class Cuenta {
         this.cliente = cliente;
         this.saldos = saldos;
         this.transacciones = transacciones;
+        this.monto = monto;
     }
 
     /**
@@ -189,6 +193,20 @@ public class Cuenta {
      */
     public void setTransacciones(List<Transaccion> transacciones) {
         this.transacciones = transacciones;
+    }
+
+    /**
+     * @return the monto
+     */
+    public Float getMonto() {
+        return monto;
+    }
+
+    /**
+     * @param monto the monto to set
+     */
+    public void setMonto(Float monto) {
+        this.monto = monto;
     }
 
 }

@@ -66,7 +66,8 @@ public class SaldoEndpoint {
                 null,
                 null,
                 null,
-                null
+                null,
+                currentCn.getMonto()
         );
         
         return new Saldo(

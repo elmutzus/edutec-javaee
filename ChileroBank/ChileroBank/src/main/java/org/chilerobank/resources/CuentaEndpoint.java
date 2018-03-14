@@ -139,7 +139,8 @@ public class CuentaEndpoint {
                 actualTp,
                 actualCl,
                 actualSls,
-                actualTrxs
+                actualTrxs,
+                current.getMonto()
         );
     }
 
@@ -178,7 +179,8 @@ public class CuentaEndpoint {
                 this.tpDao.find(dto.getTipoCuenta()),
                 this.clDao.find(dto.getCliente()),
                 actualSls,
-                actualTrxs
+                actualTrxs,
+                dto.getMonto()
         );
     }
 

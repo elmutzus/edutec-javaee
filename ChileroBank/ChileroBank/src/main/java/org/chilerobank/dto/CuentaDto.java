@@ -22,6 +22,7 @@ public class CuentaDto {
     private Integer cliente;
     private List<Integer> saldos;
     private List<Integer> transacciones;
+    private Float monto;
 
     /**
      * @return the id
@@ -133,6 +134,20 @@ public class CuentaDto {
      */
     public void setTransacciones(List<Integer> transacciones) {
         this.transacciones = transacciones;
+    }
+
+    /**
+     * @return the monto
+     */
+    public Float getMonto() {
+        return monto;
+    }
+
+    /**
+     * @param monto the monto to set
+     */
+    public void setMonto(Float monto) {
+        this.monto = monto;
     }
 
 }

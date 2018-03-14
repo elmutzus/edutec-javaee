@@ -22,11 +22,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.OperacionDao;
+import org.chilerobank.dao.SaldoDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TransaccionDto;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
+import org.chilerobank.model.Saldo;
 import org.chilerobank.model.Transaccion;
 
 /**
@@ -40,6 +42,9 @@ public class TransaccionEndpoint {
     final TransaccionDao trDao;
     final CuentaDao cnDao;
     final OperacionDao opDao;
+
+    final static int DEBIT = 1;
+    final static int CREDIT = 2;
 
     public TransaccionEndpoint() {
         this.trDao = null;
@@ -84,7 +89,8 @@ public class TransaccionEndpoint {
                         null,
                         null,
                         null,
-                        null
+                        null,
+                        curCuenta.getMonto()
                 ),
                 actualOp
         );
@@ -104,6 +110,21 @@ public class TransaccionEndpoint {
                 this.cnDao.find(dto.getCuenta()),
                 this.opDao.find(dto.getOperacion())
         );
+    }
+
+    
+    public float getTotalAmount(Cuenta cnt, float amount, int type) {
+        float total = cnt.getMonto();
+
+        if (type == CREDIT) {
+            return total + amount;
+        }
+
+        if (type == DEBIT) {
+            return total - amount;
+        }
+
+        throw new InternalError("Debe elegir una opción válida. 1=Débito, 2=CRÉDITO");
     }
 
     @GET
@@ -140,11 +161,32 @@ public class TransaccionEndpoint {
     @Consumes({"application/json"})
     @Produces({"application/json"})
     public Response create(TransaccionDto dto) {
-        Transaccion tr = createFromDto(dto);
+        Cuenta cnt = this.cnDao.find(dto.getCuenta());
+        
+        if(cnt == null){
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessageDto(false, 404, "No se encontró la cuenta"))
+                    .build();
+        }
 
-        this.trDao.save(tr);
+        float saldo = getTotalAmount(cnt, dto.getMonto(), dto.getOperacion());
 
-        return Response.ok(createResponseObject(tr)).build();
+        if (saldo > 0) {
+            Transaccion tr = createFromDto(dto);
+
+            this.trDao.save(tr);
+            
+            cnt.setMonto(saldo);
+            this.cnDao.save(cnt);
+
+            return Response.ok(createResponseObject(tr)).build();
+        } else {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
+                    .build();
+        }
     }
 
     @PUT
