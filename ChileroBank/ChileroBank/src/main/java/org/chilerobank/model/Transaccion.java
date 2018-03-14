@@ -44,6 +44,9 @@ public class Transaccion {
 
     @Column(name = "monto")
     private Float monto;
+    
+    @Column(name = "monto_final")
+    private Float montoFinal;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cuenta")
@@ -56,12 +59,13 @@ public class Transaccion {
     public Transaccion() {
     }
 
-    public Transaccion(Integer id, Date fechaMovimiento, Float monto, Cuenta cuenta, Operacion operacion) {
+    public Transaccion(Integer id, Date fechaMovimiento, Float monto, Float montoFinal, Cuenta cuenta, Operacion operacion) {
         this.id = id;
         this.fechaMovimiento = fechaMovimiento;
         this.monto = monto;
         this.cuenta = cuenta;
         this.operacion = operacion;
+        this.montoFinal = montoFinal;
     }
 
     /**
@@ -132,6 +136,20 @@ public class Transaccion {
      */
     public void setOperacion(Operacion operacion) {
         this.operacion = operacion;
+    }
+
+    /**
+     * @return the montoFinal
+     */
+    public Float getMontoFinal() {
+        return montoFinal;
+    }
+
+    /**
+     * @param montoFinal the montoFinal to set
+     */
+    public void setMontoFinal(Float montoFinal) {
+        this.montoFinal = montoFinal;
     }
 
 }

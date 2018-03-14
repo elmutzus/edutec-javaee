@@ -65,6 +65,7 @@ public class OperacionEndpoint {
                         cur.getId(),
                         cur.getFechaMovimiento(),
                         cur.getMonto(),
+                        cur.getMontoFinal(),
                         null,
                         null
                 ))

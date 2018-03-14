@@ -103,6 +103,7 @@ public class CuentaEndpoint {
                                         curTrx.getId(),
                                         curTrx.getFechaMovimiento(),
                                         curTrx.getMonto(),
+                                        curTrx.getMontoFinal(),
                                         null,
                                         null
                                 )

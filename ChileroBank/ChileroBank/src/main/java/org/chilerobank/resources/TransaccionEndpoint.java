@@ -77,6 +77,7 @@ public class TransaccionEndpoint {
                 current.getId(),
                 current.getFechaMovimiento(),
                 current.getMonto(),
+                current.getMontoFinal(),
                 new Cuenta(
                         curCuenta.getId(),
                         curCuenta.getMoneda(),
@@ -102,6 +103,7 @@ public class TransaccionEndpoint {
                 dto.getId(),
                 dto.getFechaMovimiento(),
                 dto.getMonto(),
+                dto.getMontoFinal(),
                 this.cnDao.find(dto.getCuenta()),
                 this.opDao.find(dto.getOperacion())
         );
@@ -169,6 +171,8 @@ public class TransaccionEndpoint {
 
         if (saldo > 0) {
             Transaccion tr = createFromDto(dto);
+            
+            tr.setMontoFinal(saldo);
 
             this.trDao.save(tr);
             

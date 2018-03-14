@@ -18,6 +18,7 @@ public class TransaccionDto {
     private Float monto;
     private Integer cuenta;
     private Integer operacion;
+    private Float montoFinal;
 
     /**
      * @return the id
@@ -87,6 +88,20 @@ public class TransaccionDto {
      */
     public void setOperacion(Integer operacion) {
         this.operacion = operacion;
+    }
+
+    /**
+     * @return the montoFinal
+     */
+    public Float getMontoFinal() {
+        return montoFinal;
+    }
+
+    /**
+     * @param montoFinal the montoFinal to set
+     */
+    public void setMontoFinal(Float montoFinal) {
+        this.montoFinal = montoFinal;
     }
 
 }
