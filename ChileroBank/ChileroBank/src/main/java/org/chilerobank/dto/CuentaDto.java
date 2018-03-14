@@ -20,7 +20,6 @@ public class CuentaDto {
     private Integer estado;
     private Integer tipoCuenta;
     private Integer cliente;
-    private List<Integer> saldos;
     private List<Integer> transacciones;
     private Float monto;
 
@@ -106,20 +105,6 @@ public class CuentaDto {
      */
     public void setCliente(Integer cliente) {
         this.cliente = cliente;
-    }
-
-    /**
-     * @return the saldos
-     */
-    public List<Integer> getSaldos() {
-        return saldos;
-    }
-
-    /**
-     * @param saldos the saldos to set
-     */
-    public void setSaldos(List<Integer> saldos) {
-        this.saldos = saldos;
     }
 
     /**

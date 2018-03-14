@@ -9,12 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.transaction.RollbackException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,13 +20,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.OperacionDao;
-import org.chilerobank.dao.SaldoDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TransaccionDto;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
-import org.chilerobank.model.Saldo;
 import org.chilerobank.model.Transaccion;
 
 /**
@@ -86,7 +82,6 @@ public class TransaccionEndpoint {
                         curCuenta.getMoneda(),
                         curCuenta.getFechaApertura(),
                         curCuenta.getEstado(),
-                        null,
                         null,
                         null,
                         null,
@@ -189,21 +184,21 @@ public class TransaccionEndpoint {
         }
     }
 
-    @PUT
-    @Produces({"application/json"})
-    public Response update(TransaccionDto dto) throws RollbackException {
-        Transaccion tr = createFromDto(dto);
-
-        Transaccion updatedTr = this.trDao.edit(tr);
-        if (updatedTr == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
-                    .build();
-        }
-
-        return Response.ok(createResponseObject(updatedTr)).build();
-    }
+//    @PUT
+//    @Produces({"application/json"})
+//    public Response update(TransaccionDto dto) throws RollbackException {
+//        Transaccion tr = createFromDto(dto);
+//
+//        Transaccion updatedTr = this.trDao.edit(tr);
+//        if (updatedTr == null) {
+//            return Response
+//                    .status(Response.Status.NOT_FOUND)
+//                    .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
+//                    .build();
+//        }
+//
+//        return Response.ok(createResponseObject(updatedTr)).build();
+//    }
 
     @DELETE
     @Path("{id}")

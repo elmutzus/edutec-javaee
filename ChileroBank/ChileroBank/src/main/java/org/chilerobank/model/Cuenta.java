@@ -30,9 +30,9 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "cuenta")
 @NamedQueries({
-    @NamedQuery(name = "cuenta.findAll", query = "SELECT DISTINCT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.saldos sl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones")
+    @NamedQuery(name = "cuenta.findAll", query = "SELECT DISTINCT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones")
     ,
-    @NamedQuery(name = "cuenta.findById", query = "SELECT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.saldos sl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones WHERE cn.id = :id")
+    @NamedQuery(name = "cuenta.findById", query = "SELECT cn FROM Cuenta cn LEFT JOIN FETCH cn.cliente cl LEFT JOIN cn.tipoCuenta tp LEFT JOIN cn.transacciones WHERE cn.id = :id")
 })
 public class Cuenta {
 
@@ -63,22 +63,18 @@ public class Cuenta {
     private Cliente cliente;
 
     @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Saldo> saldos;
-
-    @OneToMany(mappedBy = "cuenta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Transaccion> transacciones;
 
     public Cuenta() {
     }
 
-    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Saldo> saldos, List<Transaccion> transacciones, Float monto) {
+    public Cuenta(Integer id, String moneda, Date fechaApertura, Integer estado, TipoCuenta tipoCuenta, Cliente cliente, List<Transaccion> transacciones, Float monto) {
         this.id = id;
         this.moneda = moneda;
         this.fechaApertura = fechaApertura;
         this.estado = estado;
         this.tipoCuenta = tipoCuenta;
         this.cliente = cliente;
-        this.saldos = saldos;
         this.transacciones = transacciones;
         this.monto = monto;
     }
@@ -165,20 +161,6 @@ public class Cuenta {
      */
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
-    }
-
-    /**
-     * @return the saldo
-     */
-    public List<Saldo> getSaldos() {
-        return saldos;
-    }
-
-    /**
-     * @param saldo the saldo to set
-     */
-    public void setSaldos(List<Saldo> saldos) {
-        this.saldos = saldos;
     }
 
     /**

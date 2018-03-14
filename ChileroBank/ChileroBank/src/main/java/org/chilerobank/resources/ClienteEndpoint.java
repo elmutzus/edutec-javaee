@@ -74,7 +74,6 @@ public class ClienteEndpoint {
                         null,
                         null,
                         null,
-                        null,
                         cur.getMonto()
                 ))
                 );

@@ -47,7 +47,6 @@ public class CuentaDao {
             ct.setEstado(entity.getEstado());
             ct.setFechaApertura(entity.getFechaApertura());
             ct.setMoneda(entity.getMoneda());
-            ct.setSaldos(entity.getSaldos());
             ct.setTipoCuenta(entity.getTipoCuenta());
             ct.setTransacciones(entity.getTransacciones());
             this.em.merge(ct);

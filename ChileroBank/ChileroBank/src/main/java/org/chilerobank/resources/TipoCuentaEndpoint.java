@@ -69,7 +69,6 @@ public class TipoCuentaEndpoint {
                         null,
                         null,
                         null,
-                        null,
                         cur.getMonto()
                 ))
                 );

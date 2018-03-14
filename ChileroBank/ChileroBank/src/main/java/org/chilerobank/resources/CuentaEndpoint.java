@@ -22,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.chilerobank.dao.ClienteDao;
 import org.chilerobank.dao.CuentaDao;
-import org.chilerobank.dao.SaldoDao;
 import org.chilerobank.dao.TipoCuentaDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.CuentaDto;
@@ -30,7 +29,6 @@ import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.model.Cliente;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
-import org.chilerobank.model.Saldo;
 import org.chilerobank.model.TipoCuenta;
 import org.chilerobank.model.Transaccion;
 
@@ -44,23 +42,20 @@ public class CuentaEndpoint {
 
     final CuentaDao cntDao;
     final TipoCuentaDao tpDao;
-    final SaldoDao slDao;
     final TransaccionDao trxDao;
     final ClienteDao clDao;
 
     public CuentaEndpoint() {
         this.cntDao = null;
         this.tpDao = null;
-        this.slDao = null;
         this.trxDao = null;
         this.clDao = null;
     }
 
     @Inject
-    public CuentaEndpoint(CuentaDao cntDao, TipoCuentaDao tpDao, SaldoDao slDao, TransaccionDao trxDao, ClienteDao clDao) {
+    public CuentaEndpoint(CuentaDao cntDao, TipoCuentaDao tpDao, TransaccionDao trxDao, ClienteDao clDao) {
         this.cntDao = cntDao;
         this.tpDao = tpDao;
-        this.slDao = slDao;
         this.trxDao = trxDao;
         this.clDao = clDao;
     }
@@ -95,21 +90,6 @@ public class CuentaEndpoint {
                 null
         );
         
-        List<Saldo> actualSls = new ArrayList<>();
-
-        if (current.getSaldos() != null && current.getSaldos().size() > 0) {
-            current.getSaldos()
-                    .stream()
-                    .forEach((curSl) -> actualSls.add(
-                    new Saldo(
-                            curSl.getId(),
-                            null,
-                            curSl.getFecha(),
-                            curSl.getMonto()
-                    )
-            ));
-        }
-
         List<Transaccion> actualTrxs = new ArrayList<>();
 
         if (current.getTransacciones() != null && current.getTransacciones().size() > 0) {
@@ -138,7 +118,6 @@ public class CuentaEndpoint {
                 current.getEstado(),
                 actualTp,
                 actualCl,
-                actualSls,
                 actualTrxs,
                 current.getMonto()
         );
@@ -151,16 +130,6 @@ public class CuentaEndpoint {
      * @return
      */
     public Cuenta createFromDto(CuentaDto dto) {
-        List<Saldo> actualSls = new ArrayList<>();
-
-        if (dto.getSaldos() != null && dto.getSaldos().size() > 0) {
-            dto.getSaldos()
-                    .stream()
-                    .forEach((id)
-                            -> actualSls.add(this.slDao.find(id))
-                    );
-        }
-
         List<Transaccion> actualTrxs = new ArrayList<>();
 
         if (dto.getTransacciones() != null && dto.getTransacciones().size() > 0) {
@@ -178,7 +147,6 @@ public class CuentaEndpoint {
                 dto.getEstado(),
                 this.tpDao.find(dto.getTipoCuenta()),
                 this.clDao.find(dto.getCliente()),
-                actualSls,
                 actualTrxs,
                 dto.getMonto()
         );
