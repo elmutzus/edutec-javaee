@@ -10,9 +10,9 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,6 +23,7 @@ import org.chilerobank.dao.OperacionDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
 import org.chilerobank.dto.TransaccionDto;
+import org.chilerobank.dto.TransferenciaDto;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
 import org.chilerobank.model.Transaccion;
@@ -109,7 +110,6 @@ public class TransaccionEndpoint {
         );
     }
 
-    
     public float getTotalAmount(Cuenta cnt, float amount, int type) {
         float total = cnt.getMonto();
 
@@ -159,8 +159,8 @@ public class TransaccionEndpoint {
     @Produces({"application/json"})
     public Response create(TransaccionDto dto) {
         Cuenta cnt = this.cnDao.find(dto.getCuenta());
-        
-        if(cnt == null){
+
+        if (cnt == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
                     .entity(new ErrorMessageDto(false, 404, "No se encontró la cuenta"))
@@ -171,52 +171,76 @@ public class TransaccionEndpoint {
 
         if (saldo > 0) {
             Transaccion tr = createFromDto(dto);
-            
+
             tr.setMontoFinal(saldo);
 
             this.trDao.save(tr);
-            
+
             cnt.setMonto(saldo);
             this.cnDao.save(cnt);
 
             return Response.ok(createResponseObject(tr)).build();
-        } else {
-            return Response
-                    .status(Response.Status.CONFLICT)
-                    .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
-                    .build();
         }
+
+        return Response
+                .status(Response.Status.CONFLICT)
+                .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
+                .build();
+
     }
 
-//    @PUT
-//    @Produces({"application/json"})
-//    public Response update(TransaccionDto dto) throws RollbackException {
-//        Transaccion tr = createFromDto(dto);
-//
-//        Transaccion updatedTr = this.trDao.edit(tr);
-//        if (updatedTr == null) {
-//            return Response
-//                    .status(Response.Status.NOT_FOUND)
-//                    .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
-//                    .build();
-//        }
-//
-//        return Response.ok(createResponseObject(updatedTr)).build();
-//    }
-
-    @DELETE
-    @Path("{id}")
+    @PUT
+    @Consumes({"application/json"})
     @Produces({"application/json"})
-    public Response delete(@PathParam("id") Integer id) {
-        Transaccion tp = this.trDao.remove(id);
+    public Response transfer(TransferenciaDto dto) {
+        Cuenta cntOrigin = this.cnDao.find(dto.getCuentaOrigen());
 
-        if (tp == null) {
+        if (cntOrigin == null) {
             return Response
                     .status(Response.Status.NOT_FOUND)
-                    .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
+                    .entity(new ErrorMessageDto(false, 404, "No se encontró la cuenta"))
                     .build();
         }
 
-        return Response.ok(createResponseObject(tp)).build();
+        Cuenta cntDestiny = this.cnDao.find(dto.getCuentaDestino());
+
+        if (cntDestiny == null) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessageDto(false, 404, "No se encontró la cuenta"))
+                    .build();
+        }
+
+        float saldo = getTotalAmount(cntOrigin, dto.getMonto(), DEBIT);
+
+        if (saldo > 0) {
+
+            float saldo2 = getTotalAmount(cntDestiny, dto.getMonto(), CREDIT);
+            if (saldo2 > 0) {
+                Transaccion tr = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntOrigin, this.opDao.find(DEBIT));
+                tr.setMontoFinal(saldo);
+                this.trDao.save(tr);
+                cntOrigin.setMonto(saldo);
+                this.cnDao.save(cntOrigin);
+
+                Transaccion tr2 = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntDestiny, this.opDao.find(CREDIT));
+                tr2.setMontoFinal(saldo2);
+                this.trDao.save(tr2);
+                cntDestiny.setMonto(saldo2);
+                this.cnDao.save(cntDestiny);
+
+                List<Transaccion> cuentas = new ArrayList<>();
+
+                cuentas.add(createResponseObject(tr));
+                cuentas.add(createResponseObject(tr2));
+
+                return Response.ok(cuentas).build();
+            }
+        }
+
+        return Response
+                .status(Response.Status.CONFLICT)
+                .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
+                .build();
     }
 }
