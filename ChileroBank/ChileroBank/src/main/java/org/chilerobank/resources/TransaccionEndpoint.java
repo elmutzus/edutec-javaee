@@ -216,26 +216,24 @@ public class TransaccionEndpoint {
         if (saldo > 0) {
 
             float saldo2 = getTotalAmount(cntDestiny, dto.getMonto(), CREDIT);
-            if (saldo2 > 0) {
-                Transaccion tr = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntOrigin, this.opDao.find(DEBIT));
-                tr.setMontoFinal(saldo);
-                this.trDao.save(tr);
-                cntOrigin.setMonto(saldo);
-                this.cnDao.save(cntOrigin);
+            Transaccion tr = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntOrigin, this.opDao.find(DEBIT));
+            tr.setMontoFinal(saldo);
+            this.trDao.save(tr);
+            cntOrigin.setMonto(saldo);
+            this.cnDao.save(cntOrigin);
 
-                Transaccion tr2 = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntDestiny, this.opDao.find(CREDIT));
-                tr2.setMontoFinal(saldo2);
-                this.trDao.save(tr2);
-                cntDestiny.setMonto(saldo2);
-                this.cnDao.save(cntDestiny);
+            Transaccion tr2 = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntDestiny, this.opDao.find(CREDIT));
+            tr2.setMontoFinal(saldo2);
+            this.trDao.save(tr2);
+            cntDestiny.setMonto(saldo2);
+            this.cnDao.save(cntDestiny);
 
-                List<Transaccion> cuentas = new ArrayList<>();
+            List<Transaccion> cuentas = new ArrayList<>();
 
-                cuentas.add(createResponseObject(tr));
-                cuentas.add(createResponseObject(tr2));
+            cuentas.add(createResponseObject(tr));
+            cuentas.add(createResponseObject(tr2));
 
-                return Response.ok(cuentas).build();
-            }
+            return Response.ok(cuentas).build();
         }
 
         return Response
