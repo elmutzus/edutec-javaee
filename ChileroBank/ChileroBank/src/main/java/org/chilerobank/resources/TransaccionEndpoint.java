@@ -22,11 +22,13 @@ import org.chilerobank.dao.CuentaDao;
 import org.chilerobank.dao.OperacionDao;
 import org.chilerobank.dao.TransaccionDao;
 import org.chilerobank.dto.ErrorMessageDto;
+import org.chilerobank.dto.PagoTarjetaDto;
 import org.chilerobank.dto.TransaccionDto;
 import org.chilerobank.dto.TransferenciaDto;
 import org.chilerobank.model.Cuenta;
 import org.chilerobank.model.Operacion;
 import org.chilerobank.model.Transaccion;
+import org.chilerobank.service.TarjetaService;
 
 /**
  *
@@ -240,5 +242,98 @@ public class TransaccionEndpoint {
                 .status(Response.Status.CONFLICT)
                 .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
                 .build();
+    }
+
+    @POST
+    @Path("payCard")
+    @Consumes({"application/json"})
+    @Produces({"application/json"})
+    public Response payCard(TransaccionDto dto) {
+        Cuenta cnt = this.cnDao.find(dto.getCuenta());
+
+        if (cnt == null) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessageDto(false, 404, "No se encontró la cuenta"))
+                    .build();
+        }
+
+        float saldo = getTotalAmount(cnt, dto.getMonto(), DEBIT);
+
+        if (saldo > 0) {
+            TarjetaService srv = new TarjetaService();
+
+            PagoTarjetaDto tcDto = new PagoTarjetaDto();
+
+            tcDto.setMontoPago(dto.getMonto());
+            tcDto.setNumeroTarjeta(dto.getTarjeta());
+            
+            try{
+
+            PagoTarjetaDto actualizado = srv.pay(tcDto);
+
+            if (actualizado != null && actualizado.getDisponible() > 0) {
+                dto.setOperacion(DEBIT);
+                Transaccion tr = createFromDto(dto);
+
+                tr.setMontoFinal(saldo);
+
+                this.trDao.save(tr);
+
+                cnt.setMonto(saldo);
+                this.cnDao.save(cnt);
+
+                return Response.ok(createResponseObject(tr)).build();
+            } else {
+                return Response
+                        .status(Response.Status.CONFLICT)
+                        .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "No se pudo pagar la tarjeta"))
+                        .build();
+            }
+            }catch(Exception ex){
+                 return Response
+                        .status(Response.Status.CONFLICT)
+                        .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), ex.getMessage()))
+                        .build();
+            }
+        }
+
+        return Response
+                .status(Response.Status.CONFLICT)
+                .entity(new ErrorMessageDto(false, 404, "El monto no es suficiente para la transacción"))
+                .build();
+
+    }
+
+    @POST
+    @Path("consumeCard")
+    @Consumes({"application/json"})
+    @Produces({"application/json"})
+    public Response consumeCard(TransaccionDto dto) {
+        TarjetaService srv = new TarjetaService();
+
+        PagoTarjetaDto tcDto = new PagoTarjetaDto();
+
+        tcDto.setMontoPago(dto.getMonto());
+        tcDto.setNumeroTarjeta(dto.getTarjeta());
+
+        try {
+            PagoTarjetaDto actualizado = srv.consume(tcDto);
+
+            if (actualizado != null && !"".equals(actualizado.getNumeroTarjeta())) {
+                return Response.ok(actualizado).build();
+            } else {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .entity(new ErrorMessageDto(false, 404, "No se encontró la tarjeta"))
+                        .build();
+            }
+        } catch (Exception ex) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, 404, ex.getMessage()))
+                    .build();
+        }
+
     }
 }

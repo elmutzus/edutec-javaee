@@ -19,7 +19,17 @@ public class TransaccionDto {
     private Integer cuenta;
     private Integer operacion;
     private Float montoFinal;
+    
+    private String tarjeta;
 
+    public String getTarjeta() {
+        return tarjeta;
+    }
+
+    public void setTarjeta(String tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+    
     /**
      * @return the id
      */
