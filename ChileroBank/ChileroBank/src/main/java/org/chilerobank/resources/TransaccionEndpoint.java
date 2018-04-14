@@ -171,7 +171,7 @@ public class TransaccionEndpoint {
 
         float saldo = getTotalAmount(cnt, dto.getMonto(), dto.getOperacion());
 
-        if (saldo > 0) {
+        if (saldo >= 0) {
             Transaccion tr = createFromDto(dto);
 
             tr.setMontoFinal(saldo);
@@ -215,7 +215,7 @@ public class TransaccionEndpoint {
 
         float saldo = getTotalAmount(cntOrigin, dto.getMonto(), DEBIT);
 
-        if (saldo > 0) {
+        if (saldo >= 0) {
 
             float saldo2 = getTotalAmount(cntDestiny, dto.getMonto(), CREDIT);
             Transaccion tr = new Transaccion(dto.getId(), dto.getFechaMovimiento(), dto.getMonto(), (float) 0, cntOrigin, this.opDao.find(DEBIT));
@@ -260,7 +260,7 @@ public class TransaccionEndpoint {
 
         float saldo = getTotalAmount(cnt, dto.getMonto(), DEBIT);
 
-        if (saldo > 0) {
+        if (saldo >= 0) {
             TarjetaService srv = new TarjetaService();
 
             PagoTarjetaDto tcDto = new PagoTarjetaDto();
