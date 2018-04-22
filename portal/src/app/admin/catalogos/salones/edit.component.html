@@ -1,0 +1,83 @@
+<div class="container min-page-height">
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>
+                <span *ngIf="id">
+                    Editando Categoría de actividades (Rubro): 
+                    <span *ngIf="entity && entity.id != null">
+                        {{entity.nombre}}
+                    </span>
+                    <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+                </span>
+                <span *ngIf="!id">
+                    Nueva Categoría de actividades
+                </span>
+            </h2>
+        </div>
+    </div>
+    <div class="row" *ngIf="entity">
+        <form novalidate #entityForm="ngForm">
+            <fieldset [disabled]="busy || readOnly">
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': nombre.invalid  && !busy}">
+                    <label>Nombre*</label>
+                    <input type="text" class="form-control" name="nombre" #nombre="ngModel" [(ngModel)]="entity.nombre" maxlength="100" required >
+                    <div>
+                        <small  class="text-danger" *ngIf="nombre.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4 col-xs-12" [ngClass]="{'has-error': descripcion.invalid && !busy }">
+                    <label>Descripción*</label>
+                    <textarea class="form-control" name="descripcion" #descripcion="ngModel" [(ngModel)]="entity.descripcion" 
+                        maxlength="500" required 
+                        rows="6">
+                    </textarea>
+                    <div>
+                        <small  class="text-danger" *ngIf="descripcion.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4" [ngClass]="{'has-error': unidad.invalid && !busy }">
+                    <label>Unidad de Medida*</label>
+                    
+                    <!-- Este se puede describir como componente ? -->
+                    <div class="input-group">
+                        <select class="form-control" name="sede" #unidad="ngModel" [(ngModel)]="entity.unidad.id" required>
+                            <option value="">Seleccionar...</option>
+                            <option *ngFor="let c of unidades" [ngValue]="c.id">{{c.descripcion}} ({{c.simbolo}})</option>
+                        </select>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" 
+                                title="Si no aparece en la lista, puede agregar un nuevo registro"
+                                (click)="showUnidadesDeMedidaDialog()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+
+                    <div>
+                        <small class="text-danger" *ngIf="unidad.invalid && !busy">
+                            Valor requerido
+                        </small>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group col-sm-4 col-xs-12 col-dlg-12" *ngIf="!readOnly">
+                    <div class="modal-footer-custom">
+                        <button class="btn btn-primary" 
+                            (click)="save()"
+                            [disabled]="!entityForm.form.valid || busy"
+                            >Guardar</button>
+                        &nbsp;
+                        &nbsp;
+                        <button class="btn btn-default" (click)="cancel()">Cancelar</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>

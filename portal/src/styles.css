@@ -1,0 +1,117 @@
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+    background: #eee;
+    margin: 30px;
+    font-family: Roboto, sans-serif;
+}
+
+
+* {
+    text-decoration: none;
+    font-family: Arial; 
+}
+
+fieldset {
+    padding: 0;
+    margin: 0;
+}
+legend {
+    margin: 20px 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.card {
+    /*padding: 20px;*/
+    width: 100%;
+    overflow: auto;
+}
+
+table.dashboard-table {
+    color: #555;
+    border-collapse: collapse;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+}
+    table.dashboard-table td, table.dashboard-table th {
+        border: 1px solid #bdbdbd;
+        padding: 5px;
+        width: 100px;
+        min-width: 70px;
+        text-align: center;
+        position: relative;
+    }
+    table.dashboard-table th {
+        background: #e0e6ef;
+        border-top: 0;
+    }
+
+    table.dashboard-table td:first-child, table.dashboard-table th:first-child {
+        text-align: left;
+        min-width: 400px;
+        border-left: 0;
+    }
+
+    table.dashboard-table tr:hover td, table.dashboard-table td.selected {
+        background: #f8f8fa;
+    }
+        table.dashboard-table tr:hover td:hover {
+            background: #eaeaea;
+        }
+
+    table.dashboard-table td > div,
+    table.dashboard-table th > div {
+        position: relative;
+        z-index: 2;
+    }
+
+.reload {
+    cursor: pointer;
+}
+    .reload img, .reload span {
+        float: left;
+        line-height: 22px;
+    }
+    .reload span {
+        float: right;
+    }
+
+/*
+.row-example {
+  border: 1px solid #000;
+  height: 200px;  
+}
+*/
+    .row-example mat-radio-button {
+        padding-bottom: 20px;
+        /*margin: 0 16px;*/
+        margin-right: 20px;
+    }
+
+.action-link:hover {
+    cursor: pointer;
+}
+
+td, th {
+    padding: 15px 5px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    border-radius: 2px;
+}
+thead tr th {
+    border-bottom: 2px solid #bbb;
+}
+tr:nth-child(even) {
+    background: #f8f8fa;
+}
+
+fieldset {
+    border: none;
+}
+
+.mat-card {
+    min-height: 800px;
+}

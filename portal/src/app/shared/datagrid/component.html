@@ -1,0 +1,54 @@
+
+    <mat-card>
+        <h2 class="visible-lg-block visible-xs-inline" *ngIf="options?.showTitle || !options?.insideDialog">
+            {{options?.title}}
+            <img src="assets/img/loading_16.gif" *ngIf="busy"/>
+        </h2>
+        <div *ngIf="options?.editable">
+            <button mat-mini-fab title="Nuevo registro" (click)="editarEntity()">+</button>
+        </div>
+        <br>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th (click)="column.sortable && sort(column.name,curPage)"
+                                *ngFor="let column of options?.columns"
+                                [ngClass]="sortIconClass[column.sortDirection]"
+                                width="{{column.width}}">
+                                {{column.caption}}
+                            </th>
+                            <th class="actionsColumn" *ngIf="options?.editable">
+                                Acciones
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entity of entityList">
+                            <td *ngFor="let column of options?.columns">
+                                {{ objectResolve(column.name, entity) }}
+                            </td>
+                            <td *ngIf="options?.editable">
+                                <a class="action-link" (click)="editarEntity(entity)" title="Editar">
+                                    <i class="material-icons">&#xE254;</i>
+                                </a>
+                                <a class="action-link" (click)="eliminar(entity)" title="Eliminar">
+                                    <i class="material-icons">&#xE872;</i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr *ngIf="busy && !sorting">
+                            <td [attr.colspan]="options.columns.length + 1" class="text-center">
+                                <img src="assets/img/loading_16.gif" />
+                            </td>
+                        </tr>
+                        <tr *ngIf="!busy && entityList.length <= 0">
+                            <td [attr.colspan]="options.columns.length + 1" class="text-center">No hay más información</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </mat-card>
