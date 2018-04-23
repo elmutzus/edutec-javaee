@@ -71,12 +71,8 @@ public class TarjetaEndpoint {
                     .type(MediaType.TEXT_HTML)
                     .entity("Imposible realizar operacion")                    
                     .build();
-        
-        List<String> informacion = new ArrayList<>();
-        informacion.add(tarjetas.get(0).getDescripcion());
-        informacion.add(tarjetas.get(0).getDisponible().toString());
-        informacion.add(tarjetas.get(0).getSaldo().toString());
-        return Response.ok(informacion).build();
+
+        return Response.ok(tarjetas.get(0)).build();
     }
     
     @POST
