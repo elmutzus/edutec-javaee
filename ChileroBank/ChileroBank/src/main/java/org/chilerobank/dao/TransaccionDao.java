@@ -30,6 +30,17 @@ public class TransaccionDao {
             return null;
         }
     }
+    
+    public List<Transaccion> findByAccount(Integer id) {
+        try {
+            return this.em
+                    .createNamedQuery("transaccion.findByAccount", Transaccion.class)
+                    .setParameter("id", id).getResultList();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
 
     public List<Transaccion> findAll() {
         return this.em.createNamedQuery("transaccion.findAll").getResultList();

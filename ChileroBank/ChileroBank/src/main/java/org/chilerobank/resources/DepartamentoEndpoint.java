@@ -151,7 +151,16 @@ public class DepartamentoEndpoint {
         if (existent != null) {
             return Response
                     .status(Response.Status.CONFLICT)
-                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Recurso ya existe"))
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Nombre ya existe"))
+                    .build();
+        }
+        
+        existent = this.dpDao.findByCode(dto.getCodigo());
+        
+        if (existent != null) {
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "Código ya existe"))
                     .build();
         }
 
@@ -164,7 +173,7 @@ public class DepartamentoEndpoint {
     @Produces({"application/json"})
     public Response update(DepartamentoDto dto) throws RollbackException {
         Departamento currentDep = createFromDto(dto);
-
+        
         Departamento updatedDep = this.dpDao.edit(currentDep);
         if (updatedDep == null) {
             return Response

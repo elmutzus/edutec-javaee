@@ -30,6 +30,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "transaccion.findAll", query = "SELECT DISTINCT trx FROM Transaccion trx")
     ,
     @NamedQuery(name = "transaccion.findById", query = "SELECT trx FROM Transaccion trx WHERE trx.id = :id")
+        ,
+    @NamedQuery(name = "transaccion.findByAccount", query = "SELECT trx FROM Transaccion trx WHERE trx.cuenta.id = :id ORDER BY trx.id")
 })
 public class Transaccion {
 

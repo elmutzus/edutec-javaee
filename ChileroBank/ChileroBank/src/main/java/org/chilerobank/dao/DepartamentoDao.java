@@ -31,7 +31,18 @@ public class DepartamentoDao {
             return null;
         }
     }
-    
+
+    public Departamento findByCode(String id) {
+        try {
+            return this.em
+                    .createNamedQuery("Departamento.findByCode", Departamento.class)
+                    .setParameter("codeDepartamento", id)
+                    .getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
     public Departamento find(String name) {
         try {
             return this.em
@@ -57,7 +68,11 @@ public class DepartamentoDao {
         if (dep != null) {
             dep.setCodigo(entity.getCodigo());
             dep.setNombre(entity.getNombre());
-            dep.setMunicipios(entity.getMunicipios());
+
+            if (entity.getMunicipios() != null && entity.getMunicipios().size() > 0) {
+                dep.setMunicipios(entity.getMunicipios());
+            }
+            
             this.em.merge(dep);
         }
         return dep;

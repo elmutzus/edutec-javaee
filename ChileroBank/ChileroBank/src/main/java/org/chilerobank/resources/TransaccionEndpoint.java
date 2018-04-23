@@ -95,6 +95,28 @@ public class TransaccionEndpoint {
         );
     }
 
+    public Transaccion createResponseObjectWithoutAccountInfo(Transaccion current) {
+        Cuenta curCuenta = current.getCuenta();
+
+        Operacion currentOp = current.getOperacion();
+
+        Operacion actualOp = new Operacion(
+                currentOp.getId(),
+                currentOp.getNombre(),
+                currentOp.getDescripcion(),
+                null
+        );
+
+        return new Transaccion(
+                current.getId(),
+                current.getFechaMovimiento(),
+                current.getMonto(),
+                current.getMontoFinal(),
+                null,
+                actualOp
+        );
+    }
+
     /**
      * Creates a response object model from a DTO
      *
@@ -154,6 +176,28 @@ public class TransaccionEndpoint {
         }
 
         return Response.ok(createResponseObject(tr), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("findByAccount/{id}")
+    @Produces({"application/json"})
+    public Response findByAccount(@PathParam("id") Integer id) {
+        List<Transaccion> trs = this.trDao.findByAccount(id);
+
+        if (trs == null) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .entity(new ErrorMessageDto(false, 404, "Recurso no encontrado"))
+                    .build();
+        }
+
+        List<Transaccion> result = new ArrayList<>();
+
+        trs.forEach((tr) -> {
+            result.add(createResponseObjectWithoutAccountInfo(tr));
+        });
+
+        return Response.ok(result, MediaType.APPLICATION_JSON).build();
     }
 
     @POST
@@ -267,31 +311,31 @@ public class TransaccionEndpoint {
 
             tcDto.setMontoPago(dto.getMonto());
             tcDto.setNumeroTarjeta(dto.getTarjeta());
-            
-            try{
 
-            PagoTarjetaDto actualizado = srv.pay(tcDto);
+            try {
 
-            if (actualizado != null && actualizado.getDisponible() > 0) {
-                dto.setOperacion(DEBIT);
-                Transaccion tr = createFromDto(dto);
+                PagoTarjetaDto actualizado = srv.pay(tcDto);
 
-                tr.setMontoFinal(saldo);
+                if (actualizado != null && actualizado.getDisponible() > 0) {
+                    dto.setOperacion(DEBIT);
+                    Transaccion tr = createFromDto(dto);
 
-                this.trDao.save(tr);
+                    tr.setMontoFinal(saldo);
 
-                cnt.setMonto(saldo);
-                this.cnDao.save(cnt);
+                    this.trDao.save(tr);
 
-                return Response.ok(createResponseObject(tr)).build();
-            } else {
+                    cnt.setMonto(saldo);
+                    this.cnDao.save(cnt);
+
+                    return Response.ok(createResponseObject(tr)).build();
+                } else {
+                    return Response
+                            .status(Response.Status.CONFLICT)
+                            .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "No se pudo pagar la tarjeta"))
+                            .build();
+                }
+            } catch (Exception ex) {
                 return Response
-                        .status(Response.Status.CONFLICT)
-                        .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), "No se pudo pagar la tarjeta"))
-                        .build();
-            }
-            }catch(Exception ex){
-                 return Response
                         .status(Response.Status.CONFLICT)
                         .entity(new ErrorMessageDto(false, Response.Status.CONFLICT.getStatusCode(), ex.getMessage()))
                         .build();

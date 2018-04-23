@@ -31,6 +31,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "Departamento.findById", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.id = :idDepartamento")
     ,
     @NamedQuery(name = "Departamento.findByName", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.nombre = :nameDepartamento")
+        ,
+    @NamedQuery(name = "Departamento.findByCode", query = "SELECT d FROM Departamento d LEFT JOIN FETCH d.municipios WHERE d.codigo = :codeDepartamento")
 })
 public class Departamento implements Serializable {
 
